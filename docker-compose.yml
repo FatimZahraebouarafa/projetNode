@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: rabta-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: rabta
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - rabta-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rabta-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/rabta
+      - JWT_SECRET=rabta_jwt_secret_key_change_in_production
+      - PORT=5000
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    networks:
+      - rabta-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  # Frontend React App
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: rabta-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - rabta-network
+
+networks:
+  rabta-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

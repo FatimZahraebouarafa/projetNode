@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.rendezvous-platform.com/user"
+           xmlns:usr="http://www.rendezvous-platform.com/user"
+           elementFormDefault="qualified">
+
+    <!-- Types communs -->
+    <xs:simpleType name="emailType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="phoneType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\+?[0-9\s\-\(\)]{10,20}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="userRoleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="USER"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Adresse -->
+    <xs:complexType name="addressType">
+        <xs:sequence>
+            <xs:element name="street" type="xs:string"/>
+            <xs:element name="city" type="xs:string"/>
+            <xs:element name="postalCode" type="xs:string"/>
+            <xs:element name="country" type="xs:string" default="France"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Préférences utilisateur -->
+    <xs:complexType name="preferencesType">
+        <xs:sequence>
+            <xs:element name="notificationEmail" type="xs:boolean" default="true"/>
+            <xs:element name="notificationSMS" type="xs:boolean" default="false"/>
+            <xs:element name="language" type="xs:string" default="fr"/>
+            <xs:element name="timezone" type="xs:string" default="Europe/Paris"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Utilisateur -->
+    <xs:complexType name="userType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="email" type="usr:emailType"/>
+            <xs:element name="phone" type="usr:phoneType" minOccurs="0"/>
+            <xs:element name="passwordHash" type="xs:string"/>
+            <xs:element name="birthDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="address" type="usr:addressType" minOccurs="0"/>
+            <xs:element name="preferences" type="usr:preferencesType" minOccurs="0"/>
+            <xs:element name="registrationDate" type="xs:dateTime"/>
+            <xs:element name="lastLogin" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="isActive" type="xs:boolean" default="true"/>
+            <xs:element name="isVerified" type="xs:boolean" default="false"/>
+        </xs:sequence>
+        <xs:attribute name="role" type="usr:userRoleType" use="required" fixed="USER"/>
+    </xs:complexType>
+
+    <!-- Élément racine -->
+    <xs:element name="utilisateur">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="usr:userType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

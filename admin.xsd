@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.rendezvous-platform.com/admin"
+           xmlns:adm="http://www.rendezvous-platform.com/admin"
+           xmlns:usr="http://www.rendezvous-platform.com/user"
+           xmlns:pro="http://www.rendezvous-platform.com/professional"
+           xmlns:rdv="http://www.rendezvous-platform.com/appointment"
+           elementFormDefault="qualified">
+
+    <!-- Import des schémas nécessaires -->
+    <xs:import namespace="http://www.rendezvous-platform.com/user"
+               schemaLocation="utilisateur.xsd"/>
+    <xs:import namespace="http://www.rendezvous-platform.com/professional"
+               schemaLocation="professionnel.xsd"/>
+    <xs:import namespace="http://www.rendezvous-platform.com/appointment"
+               schemaLocation="rendezvous.xsd"/>
+
+    <!-- Types de rôles administrateur -->
+    <xs:simpleType name="adminRoleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SUPER_ADMIN"/>
+            <xs:enumeration value="ADMIN"/>
+            <xs:enumeration value="MODERATOR"/>
+            <xs:enumeration value="SUPPORT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="adminPermissionType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="VALIDATE_PROFESSIONALS"/>
+            <xs:enumeration value="MANAGE_CATEGORIES"/>
+            <xs:enumeration value="VIEW_STATISTICS"/>
+            <xs:enumeration value="MANAGE_USERS"/>
+            <xs:enumeration value="MANAGE_APPOINTMENTS"/>
+            <xs:enumeration value="MANAGE_PAYMENTS"/>
+            <xs:enumeration value="VIEW_AUDIT_LOGS"/>
+            <xs:enumeration value="SYSTEM_CONFIGURATION"/>
+            <xs:enumeration value="ALL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Catégorie de services -->
+    <xs:complexType name="categoryType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="icon" type="xs:string" minOccurs="0"/>
+            <xs:element name="colorCode" type="xs:string" minOccurs="0"/>
+            <xs:element name="parentCategoryId" type="xs:IDREF" minOccurs="0"/>
+            <xs:element name="professionalsCount" type="xs:integer" default="0"/>
+            <xs:element name="appointmentsCount" type="xs:integer" default="0"/>
+            <xs:element name="isActive" type="xs:boolean" default="true"/>
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="updatedAt" type="xs:dateTime"/>
+            <xs:element name="createdBy" type="xs:IDREF"/> <!-- Référence à un admin -->
+            <xs:element name="ordering" type="xs:integer" default="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Validation de compte professionnel -->
+    <xs:complexType name="professionalValidationType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="professionalId" type="xs:IDREF"/> <!-- Référence à professionnel.xsd -->
+            <xs:element name="validatorId" type="xs:IDREF"/> <!-- Référence à un admin -->
+            <xs:element name="status">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="PENDING_REVIEW"/>
+                        <xs:enumeration value="DOCUMENTS_REQUESTED"/>
+                        <xs:enumeration value="UNDER_REVIEW"/>
+                        <xs:enumeration value="APPROVED"/>
+                        <xs:enumeration value="REJECTED"/>
+                        <xs:enumeration value="SUSPENDED"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="requestDate" type="xs:dateTime"/>
+            <xs:element name="reviewDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="decisionDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="comments" type="xs:string" minOccurs="0"/>
+            <xs:element name="rejectionReason" type="xs:string" minOccurs="0"/>
+            <xs:element name="documents" type="adm:validationDocumentType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="validationDuration" type="xs:integer" minOccurs="0"/> <!-- en jours -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Document de validation -->
+    <xs:complexType name="validationDocumentType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="documentType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="IDENTITY_CARD"/>
+                        <xs:enumeration value="DIPLOMA"/>
+                        <xs:enumeration value="CERTIFICATION"/>
+                        <xs:enumeration value="PROFESSIONAL_LICENSE"/>
+                        <xs:enumeration value="INSURANCE"/>
+                        <xs:enumeration value="BUSINESS_REGISTRATION"/>
+                        <xs:enumeration value="TAX_DOCUMENT"/>
+                        <xs:enumeration value="OTHER"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="documentName" type="xs:string"/>
+            <xs:element name="fileUrl" type="xs:anyURI"/>
+            <xs:element name="fileSize" type="xs:integer"/> <!-- en octets -->
+            <xs:element name="mimeType" type="xs:string"/>
+            <xs:element name="uploadDate" type="xs:dateTime"/>
+            <xs:element name="verificationStatus">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="PENDING"/>
+                        <xs:enumeration value="VERIFIED"/>
+                        <xs:enumeration value="REJECTED"/>
+                        <xs:enumeration value="EXPIRED"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="verifiedBy" type="xs:IDREF" minOccurs="0"/> <!-- Référence à un admin -->
+            <xs:element name="verificationDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="expiryDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="notes" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Administrateur -->
+    <xs:complexType name="administratorType">
+        <xs:sequence>
+            <!-- Informations de base -->
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="email" type="usr:emailType"/>
+            <xs:element name="phone" type="usr:phoneType" minOccurs="0"/>
+            <xs:element name="passwordHash" type="xs:string"/>
+            
+            <!-- Rôle et permissions -->
+            <xs:element name="role" type="adm:adminRoleType"/>
+            <xs:element name="permissions" type="adm:adminPermissionType" maxOccurs="unbounded"/>
+            
+            <!-- Informations professionnelles -->
+            <xs:element name="department" type="xs:string" minOccurs="0"/>
+            <xs:element name="title" type="xs:string" minOccurs="0"/>
+            <xs:element name="employeeId" type="xs:string" minOccurs="0"/>
+            
+            <!-- Statut et historique -->
+            <xs:element name="registrationDate" type="xs:dateTime"/>
+            <xs:element name="lastLogin" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="isActive" type="xs:boolean" default="true"/>
+            <xs:element name="isSuperAdmin" type="xs:boolean" default="false"/>
+            <xs:element name="twoFactorEnabled" type="xs:boolean" default="false"/>
+            
+            <!-- Statistiques d'activité -->
+            <xs:element name="validationsCount" type="xs:integer" default="0"/>
+            <xs:element name="actionsCount" type="xs:integer" default="0"/>
+            <xs:element name="lastActivity" type="xs:dateTime" minOccurs="0"/>
+            
+            <!-- Préférences -->
+            <xs:element name="preferences" type="adm:adminPreferencesType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Préférences administrateur -->
+    <xs:complexType name="adminPreferencesType">
+        <xs:sequence>
+            <xs:element name="dashboardLayout" type="xs:string" default="DEFAULT"/>
+            <xs:element name="notificationsEnabled" type="xs:boolean" default="true"/>
+            <xs:element name="emailReportsFrequency">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="DAILY"/>
+                        <xs:enumeration value="WEEKLY"/>
+                        <xs:enumeration value="MONTHLY"/>
+                        <xs:enumeration value="NEVER"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="itemsPerPage" type="xs:integer" default="20"/>
+            <xs:element name="timezone" type="xs:string" default="Europe/Paris"/>
+            <xs:element name="language" type="xs:string" default="fr"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Log d'audit -->
+    <xs:complexType name="auditLogType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="adminId" type="xs:IDREF"/> <!-- Référence à un admin -->
+            <xs:element name="actionType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="LOGIN"/>
+                        <xs:enumeration value="LOGOUT"/>
+                        <xs:enumeration value="CREATE"/>
+                        <xs:enumeration value="UPDATE"/>
+                        <xs:enumeration value="DELETE"/>
+                        <xs:enumeration value="VALIDATE"/>
+                        <xs:enumeration value="REJECT"/>
+                        <xs:enumeration value="SUSPEND"/>
+                        <xs:enumeration value="RESTORE"/>
+                        <xs:enumeration value="EXPORT"/>
+                        <xs:enumeration value="IMPORT"/>
+                        <xs:enumeration value="CONFIG_CHANGE"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="entityType" type="xs:string"/>
+            <xs:element name="entityId" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="oldValues" type="xs:string" minOccurs="0"/>
+            <xs:element name="newValues" type="xs:string" minOccurs="0"/>
+            <xs:element name="ipAddress" type="xs:string"/>
+            <xs:element name="userAgent" type="xs:string" minOccurs="0"/>
+            <xs:element name="timestamp" type="xs:dateTime"/>
+            <xs:element name="affectedUserId" type="xs:IDREF" minOccurs="0"/> <!-- Utilisateur affecté -->
+            <xs:element name="severity">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="INFO"/>
+                        <xs:enumeration value="WARNING"/>
+                        <xs:enumeration value="ERROR"/>
+                        <xs:enumeration value="CRITICAL"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Statistiques système -->
+    <xs:complexType name="systemStatisticsType">
+        <xs:sequence>
+            <xs:element name="periodStart" type="xs:dateTime"/>
+            <xs:element name="periodEnd" type="xs:dateTime"/>
+            <xs:element name="periodType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="DAILY"/>
+                        <xs:enumeration value="WEEKLY"/>
+                        <xs:enumeration value="MONTHLY"/>
+                        <xs:enumeration value="QUARTERLY"/>
+                        <xs:enumeration value="YEARLY"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            
+            <!-- Statistiques utilisateurs -->
+            <xs:element name="userStats" type="adm:userStatisticsType"/>
+            
+            <!-- Statistiques professionnels -->
+            <xs:element name="professionalStats" type="adm:professionalStatisticsType"/>
+            
+            <!-- Statistiques rendez-vous -->
+            <xs:element name="appointmentStats" type="adm:appointmentStatisticsType"/>
+            
+            <!-- Statistiques financières -->
+            <xs:element name="financialStats" type="adm:financialStatisticsType"/>
+            
+            <!-- Performance système -->
+            <xs:element name="systemPerformance" type="adm:performanceMetricsType"/>
+            
+            <!-- Taux de conversion -->
+            <xs:element name="conversionRates" type="adm:conversionRatesType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Statistiques utilisateurs -->
+    <xs:complexType name="userStatisticsType">
+        <xs:sequence>
+            <xs:element name="totalUsers" type="xs:integer"/>
+            <xs:element name="newUsers" type="xs:integer"/>
+            <xs:element name="activeUsers" type="xs:integer"/>
+            <xs:element name="inactiveUsers" type="xs:integer"/>
+            <xs:element name="deletedUsers" type="xs:integer"/>
+            <xs:element name="userGrowthRate" type="xs:decimal"/> <!-- Pourcentage -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Statistiques professionnels -->
+    <xs:complexType name="professionalStatisticsType">
+        <xs:sequence>
+            <xs:element name="totalProfessionals" type="xs:integer"/>
+            <xs:element name="newProfessionals" type="xs:integer"/>
+            <xs:element name="validatedProfessionals" type="xs:integer"/>
+            <xs:element name="pendingValidation" type="xs:integer"/>
+            <xs:element name="rejectedProfessionals" type="xs:integer"/>
+            <xs:element name="suspendedProfessionals" type="xs:integer"/>
+            <xs:element name="byCategory" type="adm:categoryCountType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Statistiques rendez-vous -->
+    <xs:complexType name="appointmentStatisticsType">
+        <xs:sequence>
+            <xs:element name="totalAppointments" type="xs:integer"/>
+            <xs:element name="confirmedAppointments" type="xs:integer"/>
+            <xs:element name="completedAppointments" type="xs:integer"/>
+            <xs:element name="cancelledAppointments" type="xs:integer"/>
+            <xs:element name="noShowAppointments" type="xs:integer"/>
+            <xs:element name="averageDuration" type="xs:decimal"/> <!-- en minutes -->
+            <xs:element name="peakHours" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Statistiques financières -->
+    <xs:complexType name="financialStatisticsType">
+        <xs:sequence>
+            <xs:element name="totalRevenue" type="xs:decimal"/>
+            <xs:element name="averageTransactionValue" type="xs:decimal"/>
+            <xs:element name="paymentSuccessRate" type="xs:decimal"/> <!-- Pourcentage -->
+            <xs:element name="refundAmount" type="xs:decimal"/>
+            <xs:element name="refundRate" type="xs:decimal"/> <!-- Pourcentage -->
+            <xs:element name="byPaymentMethod" type="adm:paymentMethodStatsType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Métriques de performance -->
+    <xs:complexType name="performanceMetricsType">
+        <xs:sequence>
+            <xs:element name="uptime" type="xs:decimal"/> <!-- Pourcentage -->
+            <xs:element name="averageResponseTime" type="xs:decimal"/> <!-- en ms -->
+            <xs:element name="errorRate" type="xs:decimal"/> <!-- Pourcentage -->
+            <xs:element name="activeSessions" type="xs:integer"/>
+            <xs:element name="apiRequests" type="xs:integer"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Taux de conversion -->
+    <xs:complexType name="conversionRatesType">
+        <xs:sequence>
+            <xs:element name="visitToRegistration" type="xs:decimal"/> <!-- Pourcentage -->
+            <xs:element name="registrationToFirstAppointment" type="xs:decimal"/>
+            <xs:element name="firstToSecondAppointment" type="xs:decimal"/>
+            <xs:element name="appointmentCompletionRate" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Types auxiliaires -->
+    <xs:complexType name="categoryCountType">
+        <xs:sequence>
+            <xs:element name="categoryId" type="xs:IDREF"/>
+            <xs:element name="categoryName" type="xs:string"/>
+            <xs:element name="count" type="xs:integer"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="paymentMethodStatsType">
+        <xs:sequence>
+            <xs:element name="method" type="xs:string"/>
+            <xs:element name="count" type="xs:integer"/>
+            <xs:element name="amount" type="xs:decimal"/>
+            <xs:element name="percentage" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Configuration système -->
+    <xs:complexType name="systemConfigurationType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="key" type="xs:string"/>
+            <xs:element name="value" type="xs:string"/>
+            <xs:element name="dataType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="STRING"/>
+                        <xs:enumeration value="INTEGER"/>
+                        <xs:enumeration value="DECIMAL"/>
+                        <xs:enumeration value="BOOLEAN"/>
+                        <xs:enumeration value="JSON"/>
+                        <xs:enumeration value="XML"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="category">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="GENERAL"/>
+                        <xs:enumeration value="PAYMENT"/>
+                        <xs:enumeration value="NOTIFICATION"/>
+                        <xs:enumeration value="SECURITY"/>
+                        <xs:enumeration value="APPOINTMENT"/>
+                        <xs:enumeration value="UI"/>
+                        <xs:enumeration value="API"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="isEditable" type="xs:boolean" default="true"/>
+            <xs:element name="isPublic" type="xs:boolean" default="false"/>
+            <xs:element name="lastModified" type="xs:dateTime"/>
+            <xs:element name="modifiedBy" type="xs:IDREF"/> <!-- Référence à un admin -->
+            <xs:element name="version" type="xs:integer" default="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Élément racine -->
+    <xs:element name="administrateur">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="administrator" type="adm:administratorType" maxOccurs="unbounded"/>
+                <xs:element name="category" type="adm:categoryType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="professionalValidation" type="adm:professionalValidationType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="auditLog" type="adm:auditLogType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="systemStatistics" type="adm:systemStatisticsType" maxOccurs="unbounded" minOccurs="0"/>
+                <xs:element name="systemConfiguration" type="adm:systemConfigurationType" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

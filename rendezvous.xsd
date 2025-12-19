@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.rendezvous-platform.com/appointment"
+           xmlns:rdv="http://www.rendezvous-platform.com/appointment"
+           xmlns:usr="http://www.rendezvous-platform.com/user"
+           xmlns:pro="http://www.rendezvous-platform.com/professional"
+           xmlns:pay="http://www.rendezvous-platform.com/payment"
+           xmlns:qrc="http://www.rendezvous-platform.com/qrcode"
+           elementFormDefault="qualified">
+
+    <!-- Import des schémas nécessaires -->
+    <xs:import namespace="http://www.rendezvous-platform.com/user"
+               schemaLocation="utilisateur.xsd"/>
+    <xs:import namespace="http://www.rendezvous-platform.com/professional"
+               schemaLocation="professionnel.xsd"/>
+    <xs:import namespace="http://www.rendezvous-platform.com/payment"
+               schemaLocation="paiement.xsd"/>
+    <xs:import namespace="http://www.rendezvous-platform.com/qrcode"
+               schemaLocation="qrcode.xsd"/>
+
+    <!-- Types de statut -->
+    <xs:simpleType name="appointmentStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="REQUESTED"/>
+            <xs:enumeration value="PENDING_CONFIRMATION"/>
+            <xs:enumeration value="CONFIRMED"/>
+            <xs:enumeration value="CANCELLED"/>
+            <xs:enumeration value="COMPLETED"/>
+            <xs:enumeration value="NO_SHOW"/>
+            <xs:enumeration value="RESCHEDULED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="appointmentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CONSULTATION"/>
+            <xs:enumeration value="FOLLOW_UP"/>
+            <xs:enumeration value="URGENT"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Consultation en ligne -->
+    <xs:complexType name="onlineConsultationType">
+        <xs:sequence>
+            <xs:element name="meetingPlatform">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="ZOOM"/>
+                        <xs:enumeration value="TEAMS"/>
+                        <xs:enumeration value="GOOGLE_MEET"/>
+                        <xs:enumeration value="CUSTOM"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="meetingLink" type="xs:anyURI"/>
+            <xs:element name="meetingId" type="xs:string"/>
+            <xs:element name="password" type="xs:string" minOccurs="0"/>
+            <xs:element name="joinInstructions" type="xs:string" minOccurs="0"/>
+            <xs:element name="startTime" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="endTime" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="duration" type="xs:integer" minOccurs="0"/> <!-- en minutes -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Rendez-vous -->
+    <xs:complexType name="appointmentTypeDef">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            
+            <!-- Références -->
+            <xs:element name="userId" type="xs:IDREF"/> <!-- Référence à utilisateur.xsd -->
+            <xs:element name="professionalId" type="xs:IDREF"/> <!-- Référence à professionnel.xsd -->
+            
+            <!-- Informations du rendez-vous -->
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="startTime" type="xs:time"/>
+            <xs:element name="endTime" type="xs:time"/>
+            <xs:element name="duration" type="xs:integer" minOccurs="0"/> <!-- en minutes, calculé automatiquement -->
+            
+            <!-- Détails -->
+            <xs:element name="type" type="rdv:appointmentType"/>
+            <xs:element name="status" type="rdv:appointmentStatusType"/>
+            <xs:element name="reason" type="xs:string"/>
+            <xs:element name="notes" type="xs:string" minOccurs="0"/>
+            <xs:element name="symptoms" type="xs:string" minOccurs="0"/>
+            
+            <!-- Consultation en ligne (si applicable) -->
+            <xs:element name="onlineConsultation" type="rdv:onlineConsultationType" minOccurs="0"/>
+            
+            <!-- Références aux autres entités -->
+            <xs:element name="paymentId" type="xs:IDREF" minOccurs="0"/> <!-- Référence à paiement.xsd -->
+            <xs:element name="qrcodeId" type="xs:IDREF" minOccurs="0"/> <!-- Référence à qrcode.xsd -->
+            
+            <!-- Historique -->
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="updatedAt" type="xs:dateTime"/>
+            <xs:element name="confirmedAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="cancelledAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="cancellationReason" type="xs:string" minOccurs="0"/>
+            <xs:element name="completedAt" type="xs:dateTime" minOccurs="0"/>
+            
+            <!-- Rappels -->
+            <xs:element name="reminderSent" type="xs:boolean" default="false"/>
+            <xs:element name="reminderSentAt" type="xs:dateTime" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Élément racine -->
+    <xs:element name="rendezvous">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="appointment" type="rdv:appointmentTypeDef" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

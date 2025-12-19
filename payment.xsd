@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.rendezvous-platform.com/payment"
+           xmlns:pay="http://www.rendezvous-platform.com/payment"
+           xmlns:rdv="http://www.rendezvous-platform.com/appointment"
+           elementFormDefault="qualified">
+
+    <!-- Import du schéma rendez-vous -->
+    <xs:import namespace="http://www.rendezvous-platform.com/appointment"
+               schemaLocation="rendezvous.xsd"/>
+
+    <!-- Types de statut de paiement -->
+    <xs:simpleType name="paymentStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PENDING"/>
+            <xs:enumeration value="PROCESSING"/>
+            <xs:enumeration value="COMPLETED"/>
+            <xs:enumeration value="FAILED"/>
+            <xs:enumeration value="REFUNDED"/>
+            <xs:enumeration value="PARTIALLY_REFUNDED"/>
+            <xs:enumeration value="CANCELLED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="paymentMethodType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="CREDIT_CARD"/>
+            <xs:enumeration value="DEBIT_CARD"/>
+            <xs:enumeration value="PAYPAL"/>
+            <xs:enumeration value="BANK_TRANSFER"/>
+            <xs:enumeration value="CHECK"/>
+            <xs:enumeration value="CASH"/>
+            <xs:enumeration value="HEALTH_INSURANCE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="currencyType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="EUR"/>
+            <xs:enumeration value="USD"/>
+            <xs:enumeration value="MAD"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Informations de carte de crédit (simulées) -->
+    <xs:complexType name="cardInfoType">
+        <xs:sequence>
+            <xs:element name="lastFourDigits" type="xs:string">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9]{4}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="cardType" type="xs:string"/>
+            <xs:element name="expiryMonth" type="xs:gMonth"/>
+            <xs:element name="expiryYear" type="xs:gYear"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Remise -->
+    <xs:complexType name="discountType">
+        <xs:sequence>
+            <xs:element name="code" type="xs:string" minOccurs="0"/>
+            <xs:element name="amount" type="xs:decimal"/>
+            <xs:element name="percentage" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="description" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Taxe -->
+    <xs:complexType name="taxType">
+        <xs:sequence>
+            <xs:element name="rate" type="xs:decimal"/> <!-- Pourcentage -->
+            <xs:element name="amount" type="xs:decimal"/>
+            <xs:element name="type" type="xs:string"/> <!-- TVA, etc. -->
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Paiement -->
+    <xs:complexType name="paymentType">
+        <xs:sequence>
+            <xs:element name="id" type="xs:ID"/>
+            
+            <!-- Référence au rendez-vous -->
+            <xs:element name="appointmentId" type="xs:IDREF"/> <!-- Référence à rendezvous.xsd -->
+            
+            <!-- Montant -->
+            <xs:element name="amount" type="xs:decimal"/>
+            <xs:element name="currency" type="pay:currencyType"/>
+            <xs:element name="originalAmount" type="xs:decimal"/>
+            
+            <!-- Détails financiers -->
+            <xs:element name="discount" type="pay:discountType" minOccurs="0"/>
+            <xs:element name="tax" type="pay:taxType" minOccurs="0"/>
+            <xs:element name="finalAmount" type="xs:decimal"/>
+            
+            <!-- Méthode de paiement -->
+            <xs:element name="method" type="pay:paymentMethodType"/>
+            <xs:element name="cardInfo" type="pay:cardInfoType" minOccurs="0"/>
+            
+            <!-- Statut et historique -->
+            <xs:element name="status" type="pay:paymentStatusType"/>
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="processedAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="completedAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="failedAt" type="xs:dateTime" minOccurs="0"/>
+            
+            <!-- Informations de transaction -->
+            <xs:element name="transactionId" type="xs:string" minOccurs="0"/>
+            <xs:element name="paymentGateway" type="xs:string" minOccurs="0"/>
+            <xs:element name="gatewayResponse" type="xs:string" minOccurs="0"/>
+            
+            <!-- Remboursement -->
+            <xs:element name="refundAmount" type="xs:decimal" default="0"/>
+            <xs:element name="refundedAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="refundReason" type="xs:string" minOccurs="0"/>
+            
+            <!-- Facturation -->
+            <xs:element name="invoiceNumber" type="xs:string" minOccurs="0"/>
+            <xs:element name="invoiceUrl" type="xs:anyURI" minOccurs="0"/>
+            <xs:element name="isInvoiceSent" type="xs:boolean" default="false"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Élément racine -->
+    <xs:element name="paiement">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="payment" type="pay:paymentType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.rendezvous-platform.com/professional"
+           xmlns:pro="http://www.rendezvous-platform.com/professional"
+           xmlns:usr="http://www.rendezvous-platform.com/user"
+           elementFormDefault="qualified">
+
+    <!-- Import du schéma utilisateur -->
+    <xs:import namespace="http://www.rendezvous-platform.com/user"
+               schemaLocation="utilisateur.xsd"/>
+
+    <!-- Types spécifiques aux professionnels -->
+    <xs:simpleType name="specialtyType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="MEDECIN_GENERALISTE"/>
+            <xs:enumeration value="MEDECIN_SPECIALISTE"/>
+            <xs:enumeration value="INFIRMIER"/>
+            <xs:enumeration value="KINESITHERAPEUTE"/>
+            <xs:enumeration value="PROFESSEUR"/>
+            <xs:enumeration value="COACH"/>
+            <xs:enumeration value="AVOCAT"/>
+            <xs:enumeration value="PSYCHOLOGUE"/>
+            <xs:enumeration value="AUTRE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="professionalRoleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PROFESSIONAL"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Qualification -->
+    <xs:complexType name="qualificationType">
+        <xs:sequence>
+            <xs:element name="diploma" type="xs:string"/>
+            <xs:element name="institution" type="xs:string"/>
+            <xs:element name="year" type="xs:gYear"/>
+            <xs:element name="certificationNumber" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Document (PDF) -->
+    <xs:complexType name="documentType">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="type" type="xs:string"/> <!-- Type: Baccalauréat, Doctorat, etc. -->
+            <xs:element name="file" type="xs:string"/> <!-- PDF en base64 -->
+            <xs:element name="uploadedAt" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Disponibilité -->
+    <xs:complexType name="availabilityType">
+        <xs:sequence>
+            <xs:element name="dayOfWeek">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="MONDAY"/>
+                        <xs:enumeration value="TUESDAY"/>
+                        <xs:enumeration value="WEDNESDAY"/>
+                        <xs:enumeration value="THURSDAY"/>
+                        <xs:enumeration value="FRIDAY"/>
+                        <xs:enumeration value="SATURDAY"/>
+                        <xs:enumeration value="SUNDAY"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="startTime" type="xs:time"/>
+            <xs:element name="endTime" type="xs:time"/>
+            <xs:element name="isActive" type="xs:boolean" default="true"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Exception de disponibilité -->
+    <xs:complexType name="availabilityExceptionType">
+        <xs:sequence>
+            <xs:element name="date" type="xs:date"/>
+            <xs:element name="reason" type="xs:string"/>
+            <xs:element name="isAvailable" type="xs:boolean"/>
+            <xs:element name="alternativeSlots" type="pro:availabilityType" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Tarification -->
+    <xs:complexType name="pricingType">
+        <xs:sequence>
+            <xs:element name="consultationDuration" type="xs:integer"/> <!-- en minutes -->
+            <xs:element name="price" type="xs:decimal"/>
+            <xs:element name="currency" type="xs:string" default="EUR"/>
+            <xs:element name="type">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="STANDARD"/>
+                        <xs:enumeration value="URGENT"/>
+                        <xs:enumeration value="CONTROLE"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Professionnel -->
+    <xs:complexType name="professionalType">
+        <xs:sequence>
+            <!-- Informations de base de l'utilisateur -->
+            <xs:element name="id" type="xs:ID"/>
+            <xs:element name="firstName" type="xs:string"/>
+            <xs:element name="lastName" type="xs:string"/>
+            <xs:element name="email" type="usr:emailType"/>
+            <xs:element name="phone" type="usr:phoneType"/>
+            <xs:element name="passwordHash" type="xs:string"/>
+            
+            <!-- Informations spécifiques au professionnel -->
+            <xs:element name="specialty" type="pro:specialtyType"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="profileImage" type="xs:string" minOccurs="0"/> <!-- Image de profil en base64 -->
+            <xs:element name="address" type="usr:addressType"/>
+            
+            <!-- Qualifications -->
+            <xs:element name="qualifications" type="pro:qualificationType" maxOccurs="unbounded"/>
+            
+            <!-- Documents (PDF) -->
+            <xs:element name="documents" type="pro:documentType" maxOccurs="unbounded" minOccurs="0"/>
+            
+            <!-- Disponibilités -->
+            <xs:element name="availabilities" type="pro:availabilityType" maxOccurs="7"/>
+            <xs:element name="availabilityExceptions" type="pro:availabilityExceptionType" maxOccurs="unbounded" minOccurs="0"/>
+            
+            <!-- Tarification -->
+            <xs:element name="pricing" type="pro:pricingType" maxOccurs="unbounded"/>
+            
+            <!-- Statut administratif -->
+            <xs:element name="registrationDate" type="xs:dateTime"/>
+            <xs:element name="status">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="PENDING"/>
+                        <xs:enumeration value="APPROVED"/>
+                        <xs:enumeration value="REJECTED"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="isActive" type="xs:boolean" default="true"/>
+            <xs:element name="isValidated" type="xs:boolean" default="false"/>
+            <xs:element name="validationDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="rejectionReason" type="xs:string" minOccurs="0"/>
+            <xs:element name="lastLogin" type="xs:dateTime" minOccurs="0"/>
+            
+            <!-- Évaluation -->
+            <xs:element name="rating" type="xs:decimal" minOccurs="0"/>
+            <xs:element name="reviewCount" type="xs:integer" default="0"/>
+            
+            <!-- Informations de contact professionnel -->
+            <xs:element name="companyName" type="xs:string" minOccurs="0"/>
+            <xs:element name="siret" type="xs:string" minOccurs="0"/>
+            <xs:element name="website" type="xs:anyURI" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="role" type="pro:professionalRoleType" use="required" fixed="PROFESSIONAL"/>
+    </xs:complexType>
+
+    <!-- Élément racine -->
+    <xs:element name="professionnel">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="professional" type="pro:professionalType" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
