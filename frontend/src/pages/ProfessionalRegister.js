@@ -699,6 +699,15 @@ const ProfessionalRegister = () => {
               </div>
             )}
           </form>
+          
+          <div className="toggle-auth" style={{ marginTop: '20px', textAlign: 'center' }}>
+            <p>
+              Déjà inscrit ?{' '}
+              <span style={{ color: '#d4af37', cursor: 'pointer', fontWeight: '500' }} onClick={() => navigate('/professional/auth')}>
+                Se connecter
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,128 +1,326 @@
 .landing-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1f1f1f 50%, #3e2723 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 60px 20px;
+  overflow-x: hidden;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+}
+
+.landing-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .landing-container {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .landing-header {
   text-align: center;
   color: white;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
+  max-width: 900px;
+  animation: fadeInDown 1s ease-out;
 }
 
-.landing-header h1 {
-  font-size: 4rem;
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing-header .logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 25px;
+  filter: drop-shadow(0 4px 20px rgba(212, 175, 55, 0.3));
+  transition: transform 0.4s ease, filter 0.4s ease;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.landing-header .logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 6px 30px rgba(212, 175, 55, 0.5));
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  letter-spacing: -1px;
+  text-shadow: none;
 }
 
 .tagline {
-  font-size: 1.5rem;
-  opacity: 0.9;
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+.landing-content {
+  width: 100%;
+  animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .choice-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 40px;
-  max-width: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 35px;
+  max-width: 1200px;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
 .choice-card {
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: linear-gradient(145deg, #1f1f1f 0%, #0a0a0a 100%);
+  border-radius: 20px !important;
+  padding: 35px 30px !important;
+  text-align: center !important;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(212, 175, 55, 0.1) !important;
+  flex: 1 !important;
+  min-width: 280px !important;
+  max-width: 400px !important;
+  height: 350px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(212, 175, 55, 0.15) !important;
+}
+
+.choice-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.choice-card:hover::before {
+  opacity: 1;
+}
+
+.choice-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.choice-card:hover::after {
+  opacity: 1;
 }
 
 .choice-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(212, 175, 55, 0.2),
+    inset 0 1px 0 rgba(212, 175, 55, 0.2);
 }
 
 .user-card {
-  border-top: 5px solid #4CAF50;
+  border-top: 3px solid rgba(212, 175, 55, 0.6);
 }
 
 .professional-card {
-  border-top: 5px solid #2196F3;
+  border-top: 3px solid rgba(212, 175, 55, 0.4);
 }
 
 .card-icon {
   margin-bottom: 20px;
-  color: #667eea;
+  color: #d4af37;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+}
+
+.choice-card:hover .card-icon {
+  transform: scale(1.1) rotateY(360deg);
+  filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.6));
+}
+
+.card-icon svg {
+  width: 50px;
+  height: 50px;
+  stroke-width: 1.5;
 }
 
 .choice-card h2 {
-  font-size: 2rem;
-  margin-bottom: 15px;
-  color: #333;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #d4af37;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 1.5rem;
 }
 
 .choice-card p {
-  color: #666;
-  font-size: 1.1rem;
-  margin-bottom: 30px;
+  color: rgba(212, 175, 55, 0.9);
+  font-size: 0.95rem;
+  margin-bottom: 25px;
   line-height: 1.6;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300;
+  letter-spacing: 0.3px;
 }
 
 .professional-buttons {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
+  margin-top: auto;
 }
 
 .card-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #0a0a0a;
   border: none;
-  padding: 15px 40px;
+  padding: 12px 32px;
   border-radius: 50px;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width: 100%;
+  cursor: pointer;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Inter', sans-serif;
+  z-index: 1;
+}
+
+.card-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.card-button:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .card-button.secondary {
   background: transparent;
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: 2px solid #d4af37;
+  color: #d4af37;
 }
 
 .card-button.secondary:hover {
-  background: #667eea;
-  color: white;
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #f4d03f;
+  color: #f4d03f;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 .card-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 100%);
 }
 
 .landing-footer {
   text-align: center;
-  color: white;
+  color: rgba(255, 255, 255, 0.5);
   margin-top: 60px;
-  opacity: 0.8;
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
 
 @media (max-width: 768px) {
-  .landing-header h1 {
+  .hero-title {
     font-size: 2.5rem;
   }
 
@@ -130,8 +328,21 @@
     font-size: 1.2rem;
   }
 
+  .landing-header {
+    margin-bottom: 50px;
+  }
+
   .choice-cards {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .choice-card {
+    min-width: 100% !important;
+    padding: 40px 30px !important;
+  }
+
+  .landing-header .logo {
+    width: 120px;
   }
 }

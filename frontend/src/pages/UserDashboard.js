@@ -177,6 +177,15 @@ const UserDashboard = () => {
     return found ? found.label : specialty;
   };
 
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return '';
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+  };
+
+  const formatFullName = (firstName, lastName) => {
+    return `${capitalizeFirstLetter(firstName)} ${capitalizeFirstLetter(lastName)}`;
+  };
+
   if (loading) {
     return (
       <div className="dashboard-loading">
@@ -189,7 +198,16 @@ const UserDashboard = () => {
     <div className="user-dashboard">
       <header className="dashboard-header">
         <div className="header-content">
-          <h1>Rabta</h1>
+          <div className="header-logo-title">
+            <img 
+              src="/rabtalogo.png" 
+              alt="RABTA" 
+              className="header-logo" 
+              onClick={() => navigate('/')}
+              style={{ cursor: 'pointer' }}
+            />
+
+          </div>
           <div className="header-right">
             <span className="user-name">Bienvenue, {user?.firstName}!</span>
             <button onClick={handleLogout} className="logout-button">
@@ -213,12 +231,12 @@ const UserDashboard = () => {
             onClick={() => setActiveTab('appointments')}
           >
             📅 Mes rendez-vous ({appointments.length})
+          </button>
           <button
             className={`tab ${activeTab === 'messages' ? 'active' : ''}`}
             onClick={() => setActiveTab('messages')}
           >
             💬 Messages
-          </button>
           </button>
         </div>
 
@@ -324,33 +342,63 @@ const UserDashboard = () => {
                 {appointments.map(apt => (
                   <div key={apt._id} className="appointment-card">
                     <div className="appointment-header">
-                      <h3>Dr. {apt.professionalId?.firstName} {apt.professionalId?.lastName}</h3>
+                      <div className="appointment-title-section">
+                        <h3>Dr. {formatFullName(apt.professionalId?.firstName, apt.professionalId?.lastName)}</h3>
+                        {apt.professionalId?.specialty && (
+                          <span className="specialty-subtitle">
+                            {formatSpecialty(apt.professionalId.specialty)}
+                          </span>
+                        )}
+                      </div>
                       <span className={`status-badge ${getStatusClass(apt.status)}`}>
                         {getStatusLabel(apt.status)}
                       </span>
                     </div>
                     
                     <div className="appointment-details">
-                      <div className="detail-item">
-                        <strong>📅 Date:</strong> {formatDate(apt.date)}
-                      </div>
-                      <div className="detail-item">
-                        <strong>⏰ Heure:</strong> {formatTime(apt.startTime)} - {formatTime(apt.endTime)}
-                      </div>
-                      <div className="detail-item">
-                        <strong>📋 Type:</strong> {apt.type}
-                      </div>
-                      <div className="detail-item">
-                        <strong>💬 Raison:</strong> {apt.reason}
-                      </div>
-                      {apt.professionalId?.specialty && (
-                        <div className="detail-item">
-                          <strong>🩺 Spécialité:</strong> {formatSpecialty(apt.professionalId.specialty)}
+                      <div className="detail-row">
+                        <div className="detail-box">
+                          <div className="detail-icon">📅</div>
+                          <div className="detail-content">
+                            <span className="detail-label">Date</span>
+                            <span className="detail-value">{formatDate(apt.date)}</span>
+                          </div>
                         </div>
-                      )}
-                      {apt.professionalId?.phone && (
-                        <div className="detail-item">
-                          <strong>📞 Téléphone:</strong> {apt.professionalId.phone}
+                        <div className="detail-box">
+                          <div className="detail-icon">⏰</div>
+                          <div className="detail-content">
+                            <span className="detail-label">Heure</span>
+                            <span className="detail-value">{formatTime(apt.startTime)} - {formatTime(apt.endTime)}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="detail-row">
+                        <div className="detail-box">
+                          <div className="detail-icon">📋</div>
+                          <div className="detail-content">
+                            <span className="detail-label">Type</span>
+                            <span className="detail-value">{apt.type}</span>
+                          </div>
+                        </div>
+                        {apt.professionalId?.phone && (
+                          <div className="detail-box">
+                            <div className="detail-icon">📞</div>
+                            <div className="detail-content">
+                              <span className="detail-label">Téléphone</span>
+                              <span className="detail-value">{apt.professionalId.phone}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {apt.reason && (
+                        <div className="reason-section">
+                          <div className="detail-icon">💬</div>
+                          <div className="detail-content">
+                            <span className="detail-label">Raison de consultation</span>
+                            <span className="detail-value">{apt.reason}</span>
+                          </div>
                         </div>
                       )}
                     </div>
@@ -420,7 +468,7 @@ const UserDashboard = () => {
                           onClick={() => setSelectedAppointmentForChat(apt)}
                         >
                           <div className="conversation-header">
-                            <h3>Dr. {apt.professionalId?.firstName} {apt.professionalId?.lastName}</h3>
+                            <h3>Dr. {formatFullName(apt.professionalId?.firstName, apt.professionalId?.lastName)}</h3>
                             <span className="conversation-specialty">
                               {formatSpecialty(apt.professionalId?.specialty)}
                             </span>

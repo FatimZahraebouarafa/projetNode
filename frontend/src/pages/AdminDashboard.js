@@ -104,7 +104,15 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <header className="dashboard-header">
         <div className="header-content">
-          <h1>🔐 Admin Dashboard - Rabta</h1>
+          <div className="header-logo-title">
+            <img 
+              src="/rabtalogo.png" 
+              alt="RABTA" 
+              className="header-logo" 
+              onClick={() => navigate('/')}
+              style={{ cursor: 'pointer' }}
+            />
+          </div>
           <div className="header-right">
             <span className="user-name">Admin: {user?.firstName}</span>
             <button onClick={handleLogout} className="logout-button">

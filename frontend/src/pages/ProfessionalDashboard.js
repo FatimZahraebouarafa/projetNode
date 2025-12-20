@@ -99,7 +99,15 @@ const ProfessionalDashboard = () => {
     <div className="professional-dashboard">
       <header className="dashboard-header">
         <div className="header-content">
-          <h1>💼 Espace Professionnel - Rabta</h1>
+          <div className="header-logo-title">
+            <img 
+              src="/rabtalogo.png" 
+              alt="RABTA" 
+              className="header-logo" 
+              onClick={() => navigate('/')}
+              style={{ cursor: 'pointer' }}
+            />
+          </div>
           <div className="header-right">
             <span className="user-name">
               Dr. {professional?.firstName} {professional?.lastName}

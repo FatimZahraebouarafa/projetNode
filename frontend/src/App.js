@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import UserAuth from './pages/UserAuth';
+import ProfessionalAuth from './pages/ProfessionalAuth';
 import ProfessionalRegister from './pages/ProfessionalRegister';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/user/auth" element={<UserAuth />} />
+          <Route path="/professional/auth" element={<ProfessionalAuth />} />
           <Route path="/professional/register" element={<ProfessionalRegister />} />
           
           <Route 

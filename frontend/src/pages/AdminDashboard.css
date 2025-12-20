@@ -1,13 +1,15 @@
 .admin-dashboard {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1f1f1f 50%, #3e2723 100%);
+  font-family: 'Inter', sans-serif;
 }
 
 .dashboard-header {
-  background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
+  background: linear-gradient(135deg, #1f1f1f 0%, #0a0a0a 100%);
   color: white;
-  padding: 20px 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 15px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .header-content {
@@ -19,9 +21,27 @@
   align-items: center;
 }
 
+.header-logo-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+}
+
 .header-content h1 {
+  font-family: 'Playfair Display', serif;
   font-size: 2rem;
   margin: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header-right {
@@ -32,21 +52,26 @@
 
 .user-name {
   font-size: 1.1rem;
+  color: #d4af37;
 }
 
 .logout-button {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid white;
+  background: rgba(212, 175, 55, 0.2);
+  color: #d4af37;
+  border: 2px solid #d4af37;
   padding: 8px 20px;
-  border-radius: 8px;
+  border-radius: 50px;
   font-size: 1rem;
   transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .logout-button:hover {
-  background: white;
-  color: #e91e63;
+  background: #d4af37;
+  color: #0a0a0a;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }
 
 .dashboard-container {
@@ -63,12 +88,19 @@
 }
 
 .stat-card {
-  background: white;
-  padding: 25px;
+  background: linear-gradient(145deg, #1f1f1f 0%, #0a0a0a 100%);
+  padding: 18px;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   text-align: center;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #d4af37;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: #d4af37;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
 .stat-card.highlight {
@@ -80,44 +112,47 @@
 }
 
 .stat-card h3 {
-  margin: 0 0 10px 0;
-  color: #666;
-  font-size: 1rem;
+  margin: 0 0 8px 0;
+  color: rgba(212, 175, 55, 0.8);
+  font-size: 0.9rem;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .stat-number {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #333;
+  color: #d4af37;
   margin: 0;
+  font-family: 'Playfair Display', serif;
 }
 
 .tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 30px;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.2);
 }
 
 .tab {
-  padding: 15px 30px;
+  padding: 12px 24px;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  color: #666;
+  color: rgba(255, 255, 255, 0.6);
   transition: all 0.3s ease;
 }
 
 .tab:hover {
-  color: #e91e63;
+  color: #d4af37;
 }
 
 .tab.active {
-  color: #e91e63;
-  border-bottom-color: #e91e63;
+  color: #d4af37;
+  border-bottom-color: #d4af37;
 }
 
 .professionals-list {
@@ -127,14 +162,21 @@
 }
 
 .professional-item {
-  background: white;
-  border-radius: 12px;
+  background: linear-gradient(145deg, #1f1f1f 0%, #0a0a0a 100%);
+  border-radius: 16px;
   padding: 25px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  transition: all 0.3s ease;
+}
+
+.professional-item:hover {
+  border-color: #d4af37;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
 .admin-professional-image {
@@ -143,7 +185,8 @@
   flex-shrink: 0;
   border-radius: 12px;
   overflow: hidden;
-  border: 3px solid #e91e63;
+  border: 3px solid #d4af37;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 .admin-professional-image img {
@@ -158,8 +201,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
-  color: white;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #0a0a0a;
   font-size: 2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -171,52 +214,55 @@
 
 .professional-info h3 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: #d4af37;
   font-size: 1.4rem;
+  font-family: 'Playfair Display', serif;
 }
 
 .email {
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   margin: 5px 0;
 }
 
 .specialty {
-  color: #e91e63;
+  color: rgba(212, 175, 55, 0.9);
   font-weight: 600;
   margin: 5px 0;
 }
 
 .description {
-  color: #777;
+  color: rgba(255, 255, 255, 0.6);
   margin: 10px 0;
   line-height: 1.6;
 }
 
 .date {
-  color: #999;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 0.9rem;
   margin: 5px 0;
 }
 
 .rejection-reason {
-  color: #d32f2f;
+  color: #ff6b6b;
   font-style: italic;
   margin: 10px 0;
   padding: 10px;
-  background: #ffebee;
+  background: rgba(244, 67, 54, 0.1);
   border-radius: 6px;
+  border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
 .documents-section {
   margin-top: 15px;
   padding: 15px;
-  background: #f5f5f5;
+  background: rgba(212, 175, 55, 0.05);
   border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .documents-section h4 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: #d4af37;
   font-size: 1rem;
 }
 
@@ -231,30 +277,32 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background: white;
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 6px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid rgba(212, 175, 55, 0.2);
 }
 
 .document-item span {
   font-weight: 500;
-  color: #555;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .download-btn {
-  background: #2196F3;
-  color: white;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #0a0a0a;
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: 50px;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
 .download-btn:hover {
-  background: #1976d2;
   transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
 }
 
 .professional-actions {
@@ -270,59 +318,70 @@
   font-size: 0.9rem;
   font-weight: 600;
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .status-pending {
-  background: #fff3e0;
-  color: #f57c00;
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.4);
 }
 
 .status-approved {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.4);
 }
 
 .status-rejected {
-  background: #ffebee;
-  color: #c62828;
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.4);
 }
 
 .approve-button,
 .reject-button {
   padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 50px;
   font-weight: 600;
   transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
 
 .approve-button {
-  background: #4caf50;
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .approve-button:hover {
-  background: #45a049;
   transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
 .reject-button {
-  background: #f44336;
+  background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
 }
 
 .reject-button:hover {
-  background: #da190b;
   transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
 }
 
 .no-results {
   text-align: center;
   padding: 60px 20px;
-  background: white;
-  border-radius: 12px;
-  color: #666;
+  background: linear-gradient(145deg, #1f1f1f 0%, #0a0a0a 100%);
+  border-radius: 16px;
+  color: rgba(255, 255, 255, 0.5);
   font-size: 1.2rem;
+  border: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 .dashboard-loading {
