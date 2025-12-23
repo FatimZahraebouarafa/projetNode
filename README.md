@@ -46,7 +46,47 @@ rabta/
 └── docker-compose.yml
 ```
 
-## Getting Started
+## 🚀 Quick Start with Docker
+
+### Prerequisites
+- Docker Desktop installed ([Download here](https://www.docker.com/products/docker-desktop/))
+
+### Installation
+1. Clone this repository:
+```bash
+git clone <your-repo-url>
+cd projetNode
+```
+
+2. Start the application:
+```bash
+docker-compose up -d --build
+```
+
+3. Access the application:
+- **Frontend**: http://localhost:3001
+- **Backend API**: http://localhost:5000/api/health
+- **MongoDB**: localhost:27017
+
+### Docker Commands
+```bash
+# Start all services
+docker-compose up -d
+
+# Stop all services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Restart services
+docker-compose restart
+```
+
+## 📖 Detailed Documentation
+See [README-DOCKER.md](README-DOCKER.md) for complete Docker documentation.
+
+## Getting Started (Without Docker)
 
 ### Prerequisites
 - Node.js (v16+)

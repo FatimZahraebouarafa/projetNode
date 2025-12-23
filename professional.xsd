@@ -7,7 +7,7 @@
 
     <!-- Import du schéma utilisateur -->
     <xs:import namespace="http://www.rendezvous-platform.com/user"
-               schemaLocation="utilisateur.xsd"/>
+               schemaLocation="user.xsd"/>
 
     <!-- Types spécifiques aux professionnels -->
     <xs:simpleType name="specialtyType">
@@ -35,7 +35,7 @@
         <xs:sequence>
             <xs:element name="diploma" type="xs:string"/>
             <xs:element name="institution" type="xs:string"/>
-            <xs:element name="year" type="xs:gYear"/>
+            <xs:element name="year" type="xs:integer"/>
             <xs:element name="certificationNumber" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
@@ -66,19 +66,9 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element name="startTime" type="xs:time"/>
-            <xs:element name="endTime" type="xs:time"/>
+            <xs:element name="startTime" type="xs:string"/>
+            <xs:element name="endTime" type="xs:string"/>
             <xs:element name="isActive" type="xs:boolean" default="true"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <!-- Exception de disponibilité -->
-    <xs:complexType name="availabilityExceptionType">
-        <xs:sequence>
-            <xs:element name="date" type="xs:date"/>
-            <xs:element name="reason" type="xs:string"/>
-            <xs:element name="isAvailable" type="xs:boolean"/>
-            <xs:element name="alternativeSlots" type="pro:availabilityType" maxOccurs="unbounded" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -124,8 +114,7 @@
             <xs:element name="documents" type="pro:documentType" maxOccurs="unbounded" minOccurs="0"/>
             
             <!-- Disponibilités -->
-            <xs:element name="availabilities" type="pro:availabilityType" maxOccurs="7"/>
-            <xs:element name="availabilityExceptions" type="pro:availabilityExceptionType" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element name="availabilities" type="pro:availabilityType" maxOccurs="unbounded" minOccurs="0"/>
             
             <!-- Tarification -->
             <xs:element name="pricing" type="pro:pricingType" maxOccurs="unbounded"/>
@@ -155,8 +144,12 @@
             <xs:element name="companyName" type="xs:string" minOccurs="0"/>
             <xs:element name="siret" type="xs:string" minOccurs="0"/>
             <xs:element name="website" type="xs:anyURI" minOccurs="0"/>
+            
+            <!-- Timestamps -->
+            <xs:element name="createdAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="updatedAt" type="xs:dateTime" minOccurs="0"/>
         </xs:sequence>
-        <xs:attribute name="role" type="pro:professionalRoleType" use="required" fixed="PROFESSIONAL"/>
+        <xs:attribute name="role" type="pro:professionalRoleType" default="PROFESSIONAL"/>
     </xs:complexType>
 
     <!-- Élément racine -->

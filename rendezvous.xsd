@@ -4,19 +4,13 @@
            xmlns:rdv="http://www.rendezvous-platform.com/appointment"
            xmlns:usr="http://www.rendezvous-platform.com/user"
            xmlns:pro="http://www.rendezvous-platform.com/professional"
-           xmlns:pay="http://www.rendezvous-platform.com/payment"
-           xmlns:qrc="http://www.rendezvous-platform.com/qrcode"
            elementFormDefault="qualified">
 
     <!-- Import des schémas nécessaires -->
     <xs:import namespace="http://www.rendezvous-platform.com/user"
-               schemaLocation="utilisateur.xsd"/>
+               schemaLocation="user.xsd"/>
     <xs:import namespace="http://www.rendezvous-platform.com/professional"
-               schemaLocation="professionnel.xsd"/>
-    <xs:import namespace="http://www.rendezvous-platform.com/payment"
-               schemaLocation="paiement.xsd"/>
-    <xs:import namespace="http://www.rendezvous-platform.com/qrcode"
-               schemaLocation="qrcode.xsd"/>
+               schemaLocation="professional.xsd"/>
 
     <!-- Types de statut -->
     <xs:simpleType name="appointmentStatusType">
@@ -52,8 +46,8 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element name="meetingLink" type="xs:anyURI"/>
-            <xs:element name="meetingId" type="xs:string"/>
+            <xs:element name="meetingLink" type="xs:string" minOccurs="0"/>
+            <xs:element name="meetingId" type="xs:string" minOccurs="0"/>
             <xs:element name="password" type="xs:string" minOccurs="0"/>
             <xs:element name="joinInstructions" type="xs:string" minOccurs="0"/>
             <xs:element name="startTime" type="xs:dateTime" minOccurs="0"/>
@@ -73,8 +67,8 @@
             
             <!-- Informations du rendez-vous -->
             <xs:element name="date" type="xs:date"/>
-            <xs:element name="startTime" type="xs:time"/>
-            <xs:element name="endTime" type="xs:time"/>
+            <xs:element name="startTime" type="xs:string"/>
+            <xs:element name="endTime" type="xs:string"/>
             <xs:element name="duration" type="xs:integer" minOccurs="0"/> <!-- en minutes, calculé automatiquement -->
             
             <!-- Détails -->
@@ -86,10 +80,6 @@
             
             <!-- Consultation en ligne (si applicable) -->
             <xs:element name="onlineConsultation" type="rdv:onlineConsultationType" minOccurs="0"/>
-            
-            <!-- Références aux autres entités -->
-            <xs:element name="paymentId" type="xs:IDREF" minOccurs="0"/> <!-- Référence à paiement.xsd -->
-            <xs:element name="qrcodeId" type="xs:IDREF" minOccurs="0"/> <!-- Référence à qrcode.xsd -->
             
             <!-- Historique -->
             <xs:element name="createdAt" type="xs:dateTime"/>

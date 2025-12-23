@@ -9,9 +9,9 @@
 
     <!-- Import des schémas nécessaires -->
     <xs:import namespace="http://www.rendezvous-platform.com/user"
-               schemaLocation="utilisateur.xsd"/>
+               schemaLocation="user.xsd"/>
     <xs:import namespace="http://www.rendezvous-platform.com/professional"
-               schemaLocation="professionnel.xsd"/>
+               schemaLocation="professional.xsd"/>
     <xs:import namespace="http://www.rendezvous-platform.com/appointment"
                schemaLocation="rendezvous.xsd"/>
 

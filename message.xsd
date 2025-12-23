@@ -2,12 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://www.rendezvous-platform.com/message"
            xmlns:msg="http://www.rendezvous-platform.com/message"
-           xmlns:rdv="http://www.rendezvous-platform.com/appointment"
            elementFormDefault="qualified">
-
-    <!-- Import du schéma rendez-vous -->
-    <xs:import namespace="http://www.rendezvous-platform.com/appointment"
-               schemaLocation="rendezvous.xsd"/>
 
     <!-- Type d'expéditeur/récepteur -->
     <xs:simpleType name="userModelType">
@@ -21,7 +16,7 @@
     <xs:complexType name="attachmentType">
         <xs:sequence>
             <xs:element name="fileName" type="xs:string"/>
-            <xs:element name="fileUrl" type="xs:anyURI"/>
+            <xs:element name="fileUrl" type="xs:string"/>
             <xs:element name="fileType" type="xs:string"/>
             <xs:element name="fileSize" type="xs:integer"/>
         </xs:sequence>
@@ -33,14 +28,14 @@
             <xs:element name="id" type="xs:ID"/>
             
             <!-- Rendez-vous associé -->
-            <xs:element name="appointmentId" type="xs:IDREF"/> <!-- Référence à rendezvous.xsd -->
+            <xs:element name="appointmentId" type="xs:string"/> <!-- ObjectId MongoDB -->
             
             <!-- Expéditeur -->
-            <xs:element name="senderId" type="xs:IDREF"/>
+            <xs:element name="senderId" type="xs:string"/>
             <xs:element name="senderModel" type="msg:userModelType"/>
             
             <!-- Récepteur -->
-            <xs:element name="receiverId" type="xs:IDREF"/>
+            <xs:element name="receiverId" type="xs:string"/>
             <xs:element name="receiverModel" type="msg:userModelType"/>
             
             <!-- Contenu du message -->
@@ -74,52 +69,13 @@
         </xs:sequence>
     </xs:complexType>
 
-    <!-- Conversation (groupe de messages liés à un rendez-vous) -->
-    <xs:complexType name="conversationType">
-        <xs:sequence>
-            <xs:element name="appointmentId" type="xs:IDREF"/>
-            <xs:element name="participants">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="userId" type="xs:IDREF"/>
-                        <xs:element name="professionalId" type="xs:IDREF"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="messages">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="message" type="msg:messageType" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="lastMessageAt" type="xs:dateTime" minOccurs="0"/>
-            <xs:element name="unreadCount" type="xs:integer" default="0"/>
-            <xs:element name="isActive" type="xs:boolean" default="true"/>
-        </xs:sequence>
-    </xs:complexType>
-
     <!-- Élément racine -->
     <xs:element name="messagerie">
         <xs:complexType>
-            <xs:choice>
+            <xs:sequence>
                 <xs:element name="message" type="msg:messageType" maxOccurs="unbounded"/>
-                <xs:element name="conversation" type="msg:conversationType" maxOccurs="unbounded"/>
-            </xs:choice>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
-
-    <!-- Notification de message -->
-    <xs:complexType name="messageNotificationType">
-        <xs:sequence>
-            <xs:element name="messageId" type="xs:IDREF"/>
-            <xs:element name="recipientId" type="xs:IDREF"/>
-            <xs:element name="recipientModel" type="msg:userModelType"/>
-            <xs:element name="senderName" type="xs:string"/>
-            <xs:element name="previewText" type="xs:string"/>
-            <xs:element name="notificationSent" type="xs:boolean" default="false"/>
-            <xs:element name="sentAt" type="xs:dateTime" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
 
 </xs:schema>

@@ -20,6 +20,8 @@
     <xs:simpleType name="userRoleType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="USER"/>
+            <xs:enumeration value="PROFESSIONAL"/>
+            <xs:enumeration value="ADMIN"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -59,8 +61,10 @@
             <xs:element name="lastLogin" type="xs:dateTime" minOccurs="0"/>
             <xs:element name="isActive" type="xs:boolean" default="true"/>
             <xs:element name="isVerified" type="xs:boolean" default="false"/>
+            <xs:element name="createdAt" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="updatedAt" type="xs:dateTime" minOccurs="0"/>
         </xs:sequence>
-        <xs:attribute name="role" type="usr:userRoleType" use="required" fixed="USER"/>
+        <xs:attribute name="role" type="usr:userRoleType" default="USER"/>
     </xs:complexType>
 
     <!-- Élément racine -->
