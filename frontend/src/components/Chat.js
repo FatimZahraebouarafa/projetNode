@@ -14,18 +14,21 @@ const Chat = ({ appointment, currentUser }) => {
   const otherParticipant = appointment && currentUser 
     ? (isUser ? appointment.professionalId : appointment.userId)
     : null;
+  
+  // L'ID peut être soit _id soit id
+  const currentUserId = currentUser?._id || currentUser?.id;
 
   // Log pour debug
   useEffect(() => {
     console.log('Chat - Données initiales:', {
       appointmentId: appointment?._id,
-      currentUserId: currentUser?.id,
+      currentUserId: currentUserId,
       currentUserRole: currentUser?.role,
       isUser,
       otherParticipantId: otherParticipant?._id,
       otherParticipantName: otherParticipant ? `${otherParticipant.firstName} ${otherParticipant.lastName}` : 'Non défini'
     });
-  }, [appointment, currentUser, isUser, otherParticipant]);
+  }, [appointment, currentUser, isUser, otherParticipant, currentUserId]);
 
   useEffect(() => {
     if (!appointment?._id) return;
@@ -167,7 +170,7 @@ const Chat = ({ appointment, currentUser }) => {
             : `${otherParticipant.firstName} ${otherParticipant.lastName}`}
         </h3>
         <div className="chat-appointment-info">
-          <span>Rendez-vous du {new Date(appointment.date).toLocaleDateString('fr-FR')}</span>
+          <span>{new Date(appointment.date).toLocaleDateString('fr-FR')}</span>
           <span className="separator">•</span>
           <span>{appointment.startTime} - {appointment.endTime}</span>
         </div>
@@ -184,7 +187,18 @@ const Chat = ({ appointment, currentUser }) => {
             const senderId = typeof message.senderId === 'object' 
               ? message.senderId._id 
               : message.senderId;
-            const isSentByMe = senderId === currentUser.id;
+            
+            // Convertir les deux IDs en string pour la comparaison
+            const normalizedSenderId = String(senderId);
+            const normalizedCurrentUserId = String(currentUserId);
+            const isSentByMe = normalizedSenderId === normalizedCurrentUserId;
+            
+            console.log('Message:', {
+              senderId: normalizedSenderId,
+              currentUserId: normalizedCurrentUserId,
+              isSentByMe,
+              content: message.content.substring(0, 20)
+            });
             
             return (
               <div 

@@ -2,6 +2,17 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #0a0a0a 0%, #1f1f1f 50%, #3e2723 100%);
   font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+.user-dashboard::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE et Edge */
 }
 
 .dashboard-header {
@@ -133,10 +144,22 @@
 .search-section h2,
 .appointments-section h2,
 .messages-section h2 {
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   color: #d4af37;
   font-family: 'Playfair Display', serif;
   font-size: 1.5rem;
+}
+
+.messages-section .back-button {
+  display: block;
+  width: auto;
+  margin-left: -140px;
+  margin-right: auto !important;
+  margin-bottom: -80px;
+}
+
+.messages-section .chat-wrapper {
+  margin-top: -5px;
 }
 
 .search-filters {

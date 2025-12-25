@@ -61,8 +61,7 @@ const professionalSchema = new mongoose.Schema({
   address: {
     street: { type: String, required: true },
     city: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    country: { type: String, default: 'France' }
+    postalCode: { type: String, required: true }
   },
   qualifications: [{
     diploma: { type: String, required: true },

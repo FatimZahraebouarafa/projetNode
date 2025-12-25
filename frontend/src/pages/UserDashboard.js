@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService, userService } from '../services/api';
 import appointmentService from '../services/appointmentService';
+import messageService from '../services/messageService';
 import Chat from '../components/Chat';
 import './UserDashboard.css';
 
@@ -18,6 +19,7 @@ const UserDashboard = () => {
   const [showAppointmentModal, setShowAppointmentModal] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState(null);
   const [selectedAppointmentForChat, setSelectedAppointmentForChat] = useState(null);
+  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
   const [appointmentForm, setAppointmentForm] = useState({
     date: '',
     startTime: '',
@@ -41,11 +43,24 @@ const UserDashboard = () => {
 
   useEffect(() => {
     loadData();
+    loadUnreadCount();
+    // Rafraîchir le compteur toutes les 10 secondes
+    const interval = setInterval(loadUnreadCount, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     filterProfessionals();
   }, [searchTerm, selectedSpecialty, professionals]);
+
+  const loadUnreadCount = async () => {
+    try {
+      const count = await messageService.getUnreadCount();
+      setUnreadMessagesCount(count.unreadCount || 0);
+    } catch (error) {
+      console.error('Error loading unread count:', error);
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -236,7 +251,7 @@ const UserDashboard = () => {
             className={`tab ${activeTab === 'messages' ? 'active' : ''}`}
             onClick={() => setActiveTab('messages')}
           >
-            💬 Messages
+            💬 Messages {unreadMessagesCount > 0 && `(${unreadMessagesCount})`}
           </button>
         </div>
 

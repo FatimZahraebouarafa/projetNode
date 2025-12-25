@@ -51,24 +51,37 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('Login attempt for:', email);
+
     // Check for user
     let user = await User.findOne({ email });
     let isProfessional = false;
+
+    console.log('User in users collection:', user ? 'found' : 'not found');
 
     // If not found in users, check professionals
     if (!user) {
       user = await Professional.findOne({ email });
       isProfessional = true;
+      console.log('User in professionals collection:', user ? 'found' : 'not found');
+    } else {
+      console.log('User found in users collection, role:', user.role);
     }
 
     if (!user) {
+      console.log('User not found in both collections');
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    console.log('User authenticated, role:', user.role);
+
     // Check password
+    console.log('Comparing password...');
     const isPasswordValid = await user.comparePassword(password);
+    console.log('Password valid:', isPasswordValid);
 
     if (!isPasswordValid) {
+      console.log('Invalid password');
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 

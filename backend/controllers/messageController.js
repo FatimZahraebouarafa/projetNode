@@ -148,7 +148,7 @@ exports.getUnreadCount = async (req, res) => {
       isDeleted: false
     });
 
-    res.json({ count });
+    res.json({ unreadCount: count });
   } catch (error) {
     console.error('Erreur lors du comptage des messages non lus:', error);
     res.status(500).json({ message: 'Erreur serveur' });

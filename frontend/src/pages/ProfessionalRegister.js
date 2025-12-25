@@ -24,7 +24,6 @@ const ProfessionalRegister = () => {
     street: '',
     city: '',
     postalCode: '',
-    country: 'France',
     
     // Qualifications
     diploma: '',
