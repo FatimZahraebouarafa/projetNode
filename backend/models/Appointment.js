@@ -46,12 +46,23 @@ const appointmentSchema = new mongoose.Schema({
   onlineConsultation: {
     meetingPlatform: {
       type: String,
-      enum: ['ZOOM', 'TEAMS', 'GOOGLE_MEET', 'CUSTOM']
+      enum: ['ZOOM', 'TEAMS', 'GOOGLE_MEET', 'CUSTOM', 'WEBRTC']
     },
     meetingLink: String,
     meetingId: String,
     password: String,
-    joinInstructions: String
+    joinInstructions: String,
+    roomId: String,
+    status: {
+      type: String,
+      enum: ['PENDING', 'ACTIVE', 'ENDED'],
+      default: 'PENDING'
+    },
+    startedAt: Date,
+    endedAt: Date,
+    duration: Number, // in minutes
+    notes: String,
+    prescription: String
   },
   paymentId: {
     type: mongoose.Schema.Types.ObjectId,

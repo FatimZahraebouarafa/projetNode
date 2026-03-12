@@ -27,6 +27,9 @@ services:
       - JWT_SECRET=rabta_jwt_secret_key_change_in_production
       - PORT=5000
       - NODE_ENV=production
+      - FRONTEND_URL=http://localhost:3001
+      - EMAIL_USER=fatimzouhrabouarafa123@gmail.com
+      - EMAIL_PASS=jkdu xzds gsud trpz
     depends_on:
       - mongodb
     networks:

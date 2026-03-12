@@ -251,18 +251,18 @@
 
 /* Appointments */
 .appointments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 16px;
 }
 
 .appointment-card {
   background: rgba(212, 175, 55, 0.05);
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 14px;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
   border-left: 3px solid #d4af37;
   border: 1px solid rgba(212, 175, 55, 0.2);
   transition: all 0.3s ease;
@@ -271,6 +271,7 @@
 .appointment-card:hover {
   border-color: #d4af37;
   box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  transform: translateY(-2px);
 }
 
 .appointment-card.pending {
@@ -278,8 +279,27 @@
   background: rgba(255, 152, 0, 0.05);
 }
 
+.appointment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.appointment-header h3 {
+  margin: 0;
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .appointment-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .appointment-info h3 {
@@ -296,20 +316,92 @@
   line-height: 1.4;
 }
 
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.info-row:hover {
+  color: #d4af37;
+}
+
+.info-row:hover .info-icon {
+  stroke: #d4af37;
+  transform: scale(1.1);
+}
+
+.info-icon {
+  width: 16px;
+  height: 16px;
+  min-width: 20px;
+  stroke: rgba(212, 175, 55, 0.7);
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.info-row span {
+  line-height: 1.5;
+}
+
+.info-row strong {
+  color: #d4af37;
+  margin-right: 6px;
+  font-weight: 600;
+}
+
 .appointment-actions {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.5;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.action-btn:active {
+  transform: translateY(0);
 }
 
 .status-badge {
-  padding: 5px 12px;
-  border-radius: 16px;
-  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.4px;
+  white-space: nowrap;
 }
 
 .status-confirmed {
@@ -338,42 +430,47 @@
   border: 1px solid rgba(76, 175, 80, 0.4);
 }
 
-.confirm-btn,
-.reject-btn,
-.cancel-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 40px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.4px;
-}
-
 .confirm-btn {
   background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
 .confirm-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
 }
 
 .reject-btn,
 .cancel-btn {
   background: linear-gradient(135deg, #f44336 0%, #da190b 100%);
   color: white;
-  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
 }
 
 .reject-btn:hover,
 .cancel-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+  background: linear-gradient(135deg, #da190b 0%, #c41200 100%);
+  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+}
+
+.consultation-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+}
+
+.consultation-btn:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.chat-btn {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+.chat-btn:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
 }
 
 /* Schedule */
@@ -610,22 +707,14 @@
 }
 
 .chat-btn {
-  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
-  color: #0a0a0a;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 40px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.4px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1a1a1a;
+  font-weight: 700;
 }
 
 .chat-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.4);
 }
 
 /* Messages Section */
@@ -916,3 +1005,139 @@
 .metric-card:nth-child(2) { animation-delay: 0.2s; }
 .metric-card:nth-child(3) { animation-delay: 0.3s; }
 .metric-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Consultation en ligne button */
+.consultation-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+}
+
+.consultation-btn:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.consultation-btn:active {
+  transform: scale(0.98);
+}
+
+/* Profile Section */
+.profile-section h2 {
+  margin-bottom: 30px;
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+}
+
+.profile-image-display {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 30px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #d4af37;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-image-display img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-details {
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(212, 175, 55, 0.05);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.detail-group {
+  margin-bottom: 20px;
+}
+
+.detail-group label {
+  display: block;
+  color: #d4af37;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-group p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  margin: 0;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.profile-input {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: #d4af37;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.profile-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.update-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.update-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.cancel-profile-btn {
+  padding: 12px 30px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-profile-btn:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+  color: #d4af37;
+}

@@ -421,15 +421,23 @@ const UserDashboard = () => {
                     {(apt.status === 'REQUESTED' || apt.status === 'PENDING_CONFIRMATION' || apt.status === 'CONFIRMED') && (
                       <div className="appointment-actions">
                         {apt.status === 'CONFIRMED' && (
-                          <button 
-                            onClick={() => {
-                              setSelectedAppointmentForChat(apt);
-                              setActiveTab('messages');
-                            }}
-                            className="chat-button"
-                          >
-                            💬 Envoyer un message
-                          </button>
+                          <>
+                            <button 
+                              onClick={() => navigate(`/consultation/${apt._id}`)}
+                              className="consultation-button"
+                            >
+                              🎥 Rejoindre la consultation
+                            </button>
+                            <button 
+                              onClick={() => {
+                                setSelectedAppointmentForChat(apt);
+                                setActiveTab('messages');
+                              }}
+                              className="chat-button"
+                            >
+                              💬 Envoyer un message
+                            </button>
+                          </>
                         )}
                         <button 
                           onClick={() => handleCancelAppointment(apt._id)}

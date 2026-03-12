@@ -944,3 +944,29 @@ body {
     flex-direction: column;
   }
 }
+
+/* Consultation en ligne button */
+.consultation-button {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.consultation-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 25px rgba(79, 70, 229, 0.5);
+}
+
+.consultation-button:active {
+  transform: scale(0.98);
+}

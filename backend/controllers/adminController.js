@@ -1,4 +1,5 @@
 const Professional = require('../models/Professional');
+const { sendProfessionalWelcomeEmail } = require('../utils/emailService');
 
 // @desc    Get all pending professionals
 // @route   GET /api/admin/professionals/pending
@@ -55,8 +56,29 @@ const approveProfessional = async (req, res) => {
 
     await professional.save();
 
+    const frontendBaseUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
+    const resetLink = `${frontendBaseUrl.replace(/\/$/, '')}/professional/auth?email=${encodeURIComponent(professional.email)}`;
+    const userName = `${professional.firstName || ''} ${professional.lastName || ''}`.trim() || professional.email;
+
+    let emailSent = false;
+    let emailError = null;
+
+    try {
+      await sendProfessionalWelcomeEmail({
+        toEmail: professional.email,
+        userName,
+        resetLink
+      });
+      emailSent = true;
+    } catch (error) {
+      emailError = error.message;
+      console.error('Failed to send professional welcome email:', error.message);
+    }
+
     res.json({
       message: 'Professional approved successfully',
+      emailSent,
+      ...(emailError ? { emailError } : {}),
       professional: {
         _id: professional._id,
         firstName: professional.firstName,

@@ -200,19 +200,32 @@ const Chat = ({ appointment, currentUser }) => {
               content: message.content.substring(0, 20)
             });
             
+            const displayUser = isSentByMe ? currentUser : otherParticipant;
+            
             return (
               <div 
                 key={message._id} 
                 className={`message ${isSentByMe ? 'message-sent' : 'message-received'}`}
               >
-                <div className="message-content">
-                  <p>{message.content}</p>
-                </div>
-                <div className="message-info">
-                  <span className="message-time">{formatTime(message.createdAt)}</span>
-                  {isSentByMe && message.isRead && (
-                    <span className="message-read">✓✓</span>
+                <div className="message-avatar">
+                  {displayUser.profileImage ? (
+                    <img src={displayUser.profileImage} alt="Profil" />
+                  ) : (
+                    <div className="avatar-placeholder">
+                      {displayUser.firstName?.charAt(0)}{displayUser.lastName?.charAt(0)}
+                    </div>
                   )}
+                </div>
+                <div className="message-bubble">
+                  <div className="message-content">
+                    <p>{message.content}</p>
+                  </div>
+                  <div className="message-info">
+                    <span className="message-time">{formatTime(message.createdAt)}</span>
+                    {isSentByMe && message.isRead && (
+                      <span className="message-read">✓✓</span>
+                    )}
+                  </div>
                 </div>
               </div>
             );

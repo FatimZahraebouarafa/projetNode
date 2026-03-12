@@ -7,6 +7,7 @@ import ProfessionalRegister from './pages/ProfessionalRegister';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ProfessionalDashboard from './pages/ProfessionalDashboard';
+import ConsultationRoom from './pages/ConsultationRoom';
 import { authService } from './services/api';
 
 // Protected Route Component
@@ -57,6 +58,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['ADMIN']}>
                 <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/consultation/:appointmentId" 
+            element={
+              <ProtectedRoute allowedRoles={['USER', 'PROFESSIONAL']}>
+                <ConsultationRoom />
               </ProtectedRoute>
             } 
           />

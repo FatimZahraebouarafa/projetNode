@@ -114,6 +114,11 @@ Create `.env` file in backend directory:
 MONGODB_URI=mongodb://localhost:27017/rabta
 JWT_SECRET=your_jwt_secret_key
 PORT=5000
+FRONTEND_URL=http://localhost:3001
+EMAILJS_SERVICE_ID=your_emailjs_service_id
+EMAILJS_PUBLIC_KEY=your_emailjs_public_key
+EMAILJS_PRIVATE_KEY=your_emailjs_private_key_optional
+EMAILJS_PRO_WELCOME_TEMPLATE_ID=template_37joynj
 ```
 
 ### Running the Application
