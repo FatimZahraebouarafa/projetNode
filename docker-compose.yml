@@ -21,15 +21,9 @@ services:
     container_name: rabta-backend
     restart: unless-stopped
     ports:
-      - "5000:5000"
-    environment:
-      - MONGODB_URI=mongodb://mongodb:27017/rabta
-      - JWT_SECRET=rabta_jwt_secret_key_change_in_production
-      - PORT=5000
-      - NODE_ENV=production
-      - FRONTEND_URL=http://localhost:3001
-      - EMAIL_USER=fatimzouhrabouarafa123@gmail.com
-      - EMAIL_PASS=jkdu xzds gsud trpz
+      - "5001:5001"
+    env_file:
+      - backend.env
     depends_on:
       - mongodb
     networks:
