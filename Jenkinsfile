@@ -13,7 +13,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                checkout scm
+                
 
                 echo "================================"
                 echo "Branch: ${env.BRANCH_NAME}"
@@ -156,12 +156,6 @@ pipeline {
             echo "CI/CD PIPELINE FAILED"
             echo "Check the Jenkins logs."
             echo "================================"
-        }
-
-        always {
-            echo "Cleaning Jenkins workspace..."
-
-            cleanWs()
         }
     }
 }
