@@ -76,27 +76,21 @@ pipeline {
 
             steps {
                 script {
-
-                    docker.withRegistry(
-                        "https://${DOCKER_REGISTRY}",
-                        'docker-registry-credentials'
-                    ) {
-
-                        docker.image(
-                            "${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER}"
-                        ).push()
-
-                        docker.image(
-                            "${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER}"
-                        ).push()
-
-                        docker.image(
-                            "${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER}"
-                        ).push('latest')
-
-                        docker.image(
-                            "${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER}"
-                        ).push('latest')
+                    withCredentials([usernamePassword(
+                        credentialsId: 'docker-registry-credentials',
+                        usernameVariable: 'DOCKER_USERNAME',
+                        passwordVariable: 'DOCKER_PASSWORD'
+                    )]) {
+                        sh """
+                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io
+                            docker push ${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER}
+                            docker push ${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER}
+                            docker tag ${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER} ${DOCKER_IMAGE_BACKEND}:latest
+                            docker tag ${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER} ${DOCKER_IMAGE_FRONTEND}:latest
+                            docker push ${DOCKER_IMAGE_BACKEND}:latest
+                            docker push ${DOCKER_IMAGE_FRONTEND}:latest
+                            docker logout docker.io
+                        """
                     }
                 }
             }
