@@ -1,0 +1,29 @@
+FROM jenkins/jenkins:lts
+
+# Passer en root pour installer les outils
+USER root
+
+# Installer les paquets nécessaires
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    wget
+
+# Installer Node.js et npm (version 18)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs
+
+# Installer Docker Compose
+RUN curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
+
+# Repasser en utilisateur jenkins
+USER jenkins
+
+# Installer les plugins Jenkins nécessaires
+RUN jenkins-plugin-cli --plugins \
+    docker-workflow \
+    git \
+    pipeline-stage-view \
+    timestamper \
+    ws-cleanup
