@@ -2,7 +2,7 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:7.0
-    container_name: rabta-mongodb
+    
     restart: unless-stopped
     environment:
       MONGO_INITDB_DATABASE: rabta
@@ -18,7 +18,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: rabta-backend
+    
     restart: unless-stopped
     ports:
       - "5001:5001"
@@ -37,7 +37,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: rabta-frontend
+    
     restart: unless-stopped
     ports:
       - "3001:80"
