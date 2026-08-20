@@ -60,4 +60,4 @@ RUN jenkins-plugin-cli --plugins \
     ws-cleanup
 
 
-USER jenkins
+USER root
