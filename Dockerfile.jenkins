@@ -2,40 +2,62 @@ FROM jenkins/jenkins:lts
 
 USER root
 
+# Outils de base
 RUN apt-get update \
     && apt-get install -y \
-    curl \
-    git \
-    wget \
-    ca-certificates \
-    gnupg \
+        curl \
+        git \
+        wget \
+        ca-certificates \
+        gnupg \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Installer Docker CLI
-RUN install -m 0755 -d /etc/apt/keyrings
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-RUN chmod a+r /etc/apt/keyrings/docker.gpg
-RUN echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  tee /etc/apt/sources.list.d/docker.list > /dev/null
-RUN apt-get update && apt-get install -y docker-ce-cli
 
-# Installer Node.js et npm (version 18)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+# =========================
+# Docker CLI
+# =========================
+
+RUN install -m 0755 -d /etc/apt/keyrings
+
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg \
+    | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+RUN chmod a+r /etc/apt/keyrings/docker.gpg
+
+RUN echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+    https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+    > /etc/apt/sources.list.d/docker.list
+
+RUN apt-get update \
+    && apt-get install -y \
+        docker-ce-cli \
+        docker-compose-plugin \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# =========================
+# Node.js 22
+# =========================
+
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+
 RUN apt-get install -y nodejs
 
-# Installer Docker Compose standalone
-RUN curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-RUN chmod +x /usr/local/bin/docker-compose
 
-USER jenkins
+# =========================
+# Jenkins plugins
+# =========================
 
-# Installer les plugins Jenkins nécessaires
 RUN jenkins-plugin-cli --plugins \
     docker-workflow \
     git \
     pipeline-stage-view \
     timestamper \
     ws-cleanup
+
+
+USER jenkins
