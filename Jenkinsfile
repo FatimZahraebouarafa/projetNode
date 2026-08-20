@@ -128,7 +128,7 @@ pipeline {
                         sleep(time: 10, unit: 'SECONDS')
 
                         sh '''
-                            curl -f http://localhost:3001
+                          curl -f http://host.docker.internal:3001
                         '''
                     }
                 }
