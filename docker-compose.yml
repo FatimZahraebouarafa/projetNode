@@ -28,9 +28,6 @@ services:
       - mongodb
     networks:
       - rabta-network
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
 
   # Frontend React App
   frontend:
