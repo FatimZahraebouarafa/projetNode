@@ -1,6 +1,5 @@
 FROM jenkins/jenkins:lts
 
-# Passer en root pour installer les outils
 USER root
 
 # Installer les paquets nécessaires
@@ -19,11 +18,3 @@ RUN chmod +x /usr/local/bin/docker-compose
 
 # Repasser en utilisateur jenkins
 USER jenkins
-
-# Installer les plugins Jenkins nécessaires
-RUN jenkins-plugin-cli --plugins \
-    docker-workflow \
-    git \
-    pipeline-stage-view \
-    timestamper \
-    ws-cleanup
