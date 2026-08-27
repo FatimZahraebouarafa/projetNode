@@ -15,9 +15,11 @@ services:
 
   # Backend API
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
+    image: fatimzahraebouarafa/rabta-backend:${BACKEND_TAG:-latest}
+    # Pour le développement local:
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
     
     restart: unless-stopped
     ports:
@@ -31,9 +33,11 @@ services:
 
   # Frontend React App
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    image: fatimzahraebouarafa/rabta-frontend:${FRONTEND_TAG:-latest}
+    # Pour le développement local:
+    # build:
+    #   context: ./frontend
+    #   dockerfile: Dockerfile
     
     restart: unless-stopped
     ports:

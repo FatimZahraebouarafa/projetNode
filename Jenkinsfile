@@ -27,13 +27,19 @@ pipeline {
 
                 stage('Backend Tests') {
                     steps {
-                        echo 'No backend tests configured yet.'
+                        dir('backend') {
+                            sh 'npm ci'
+                            sh 'npm test'
+                        }
                     }
                 }
 
                 stage('Frontend Tests') {
                     steps {
-                        echo 'No frontend tests configured yet.'
+                        dir('frontend') {
+                            sh 'npm install --legacy-peer-deps'
+                            sh 'npm run test:ci'
+                        }
                     }
                 }
             }
@@ -92,6 +98,7 @@ pipeline {
                             docker logout docker.io
                         """
                     }
+                    
                 }
             }
         }
