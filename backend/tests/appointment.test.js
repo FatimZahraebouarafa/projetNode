@@ -55,8 +55,13 @@ describe('Appointment Logic Tests', () => {
     });
 
     it('should detect weekend dates', () => {
-      const saturday = new Date('2026-08-30'); // Saturday
-      const sunday = new Date('2026-08-31');   // Sunday
+      // Create dates dynamically to ensure correct weekday mapping
+      const today = new Date();
+      const saturday = new Date(today);
+      saturday.setDate(today.getDate() + (6 - today.getDay() + 7) % 7);
+      
+      const sunday = new Date(saturday);
+      sunday.setDate(saturday.getDate() + 1);
       
       expect(saturday.getDay()).toBe(6);
       expect(sunday.getDay()).toBe(0);
