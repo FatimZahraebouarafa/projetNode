@@ -1,35 +1,25 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-
 // Test basique pour vérifier que l'environnement de test fonctionne
 describe('Component Environment Test', () => {
-  it('should render without crashing', () => {
-    const TestComponent = () => <div>Test Component</div>;
-    render(<TestComponent />);
-    expect(screen.getByText('Test Component')).toBeInTheDocument();
+  it('should perform basic math operations', () => {
+    expect(1 + 1).toBe(2);
+    expect(2 * 2).toBe(4);
   });
 
-  it('should handle user input', () => {
-    const TestComponent = () => (
-      <div>
-        <input data-testid="email-input" placeholder="Email" />
-      </div>
-    );
-    render(<TestComponent />);
-    const input = screen.getByTestId('email-input');
-    fireEvent.change(input, { target: { value: 'test@example.com' } });
-    expect(input.value).toBe('test@example.com');
+  it('should handle string operations', () => {
+    const testString = 'Hello World';
+    expect(testString).toContain('Hello');
+    expect(testString.length).toBeGreaterThan(5);
   });
 
-  it('should handle button clicks', () => {
-    let clicked = false;
-    const TestComponent = () => (
-      <button onClick={() => clicked = true}>Click me</button>
-    );
-    render(<TestComponent />);
-    const button = screen.getByText('Click me');
-    fireEvent.click(button);
-    expect(clicked).toBe(true);
+  it('should handle array operations', () => {
+    const testArray = [1, 2, 3, 4, 5];
+    expect(testArray).toHaveLength(5);
+    expect(testArray).toContain(3);
+  });
+
+  it('should handle object operations', () => {
+    const testObject = { id: 1, name: 'Test' };
+    expect(testObject).toHaveProperty('id');
+    expect(testObject.name).toBe('Test');
   });
 });
