@@ -45,6 +45,40 @@ pipeline {
             }
         }
 
+        
+        stage('Code Quality') {
+            parallel {
+                stage('SonarQube Backend') {
+                    steps {
+                        dir('backend') {
+                            withSonarQubeEnv('SonarQube') {
+                                sh 'sonar-scanner'
+                            }
+                        }
+                    }
+                }
+                stage('SonarQube Frontend') {
+                    steps {
+                        dir('frontend') {
+                            withSonarQubeEnv('SonarQube') {
+                                sh 'sonar-scanner'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    stage('Quality Gate') {
+        steps {
+            timeout(time: 5, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+
+
+
         stage('Build Docker Images') {
             parallel {
 
