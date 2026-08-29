@@ -13,3 +13,22 @@ jest.mock('axios', () => ({
     delete: jest.fn(() => Promise.resolve({ data: {} })),
   },
 }));
+
+// Mock messageService
+jest.mock('../services/messageService', () => ({
+  default: {
+    getMessages: jest.fn(() => Promise.resolve([])),
+    sendMessage: jest.fn(() => Promise.resolve({ _id: 'msg1', content: 'test' })),
+    markAsRead: jest.fn(() => Promise.resolve()),
+    getUnreadCount: jest.fn(() => Promise.resolve({ unreadCount: 0 })),
+  },
+}));
+
+// Mock appointmentService
+jest.mock('../services/appointmentService', () => ({
+  default: {
+    getUserAppointments: jest.fn(() => Promise.resolve([])),
+    createAppointment: jest.fn(() => Promise.resolve({})),
+    cancelAppointment: jest.fn(() => Promise.resolve({})),
+  },
+}));
