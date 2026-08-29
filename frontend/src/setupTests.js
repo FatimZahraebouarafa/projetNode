@@ -15,7 +15,7 @@ jest.mock('axios', () => ({
 }));
 
 // Mock messageService
-jest.mock('../services/messageService', () => ({
+jest.mock('./services/messageService', () => ({
   default: {
     getMessages: jest.fn(() => Promise.resolve([])),
     sendMessage: jest.fn(() => Promise.resolve({ _id: 'msg1', content: 'test' })),
@@ -25,7 +25,7 @@ jest.mock('../services/messageService', () => ({
 }));
 
 // Mock appointmentService
-jest.mock('../services/appointmentService', () => ({
+jest.mock('./services/appointmentService', () => ({
   default: {
     getUserAppointments: jest.fn(() => Promise.resolve([])),
     createAppointment: jest.fn(() => Promise.resolve({})),
