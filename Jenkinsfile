@@ -51,8 +51,11 @@ pipeline {
                 stage('SonarQube Backend') {
                     steps {
                         dir('backend') {
-                            withSonarQubeEnv('SonarQube') {
-                                sh 'sonar-scanner'
+                            script {
+                                def scannerHome = tool 'SonarQube'
+                                withSonarQubeEnv('SonarQube') {
+                                    sh "${scannerHome}/bin/sonar-scanner"
+                                }
                             }
                         }
                     }
@@ -60,8 +63,11 @@ pipeline {
                 stage('SonarQube Frontend') {
                     steps {
                         dir('frontend') {
-                            withSonarQubeEnv('SonarQube') {
-                                sh 'sonar-scanner'
+                            script {
+                                def scannerHome = tool 'SonarQube'
+                                withSonarQubeEnv('SonarQube') {
+                                    sh "${scannerHome}/bin/sonar-scanner"
+                                }
                             }
                         }
                     }
@@ -69,13 +75,13 @@ pipeline {
             }
         }
 
-    stage('Quality Gate') {
-        steps {
-            timeout(time: 5, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
-    }
 
 
 
