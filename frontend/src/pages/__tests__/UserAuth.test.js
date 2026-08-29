@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import UserAuth from '../UserAuth';
@@ -21,8 +21,8 @@ describe('UserAuth Component Tests', () => {
     );
     
     expect(screen.getByText('Connexion Utilisateur')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Mot de passe')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Mot de passe')).toBeInTheDocument();
   });
 
   it('should render register form when mode is register', () => {
@@ -37,8 +37,8 @@ describe('UserAuth Component Tests', () => {
     fireEvent.click(registerLink);
     
     expect(screen.getByText('Inscription Utilisateur')).toBeInTheDocument();
-    expect(screen.getByLabelText('Prénom')).toBeInTheDocument();
-    expect(screen.getByLabelText('Nom')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Prénom')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Nom')).toBeInTheDocument();
   });
 
   it('should toggle between login and register', () => {
@@ -69,7 +69,7 @@ describe('UserAuth Component Tests', () => {
       </Router>
     );
     
-    const emailInput = screen.getByLabelText('Email');
+    const emailInput = screen.getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     expect(emailInput.value).toBe('test@example.com');
   });

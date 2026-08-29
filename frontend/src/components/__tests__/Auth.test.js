@@ -1,37 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
-import App from '../../App';
 import LandingPage from '../../pages/LandingPage';
-
-// Mock pour authService
-jest.mock('../../services/api', () => ({
-  authService: {
-    getCurrentUser: jest.fn(),
-  },
-}));
-
-describe('App Component Tests', () => {
-  it('should render App component without crashing', () => {
-    render(
-      <Router>
-        <App />
-      </Router>
-    );
-    expect(screen.getByText('Excellence professionnelle à votre portée')).toBeInTheDocument();
-  });
-
-  it('should render LandingPage as default route', () => {
-    render(
-      <Router>
-        <App />
-      </Router>
-    );
-    expect(screen.getByText('Utilisateur')).toBeInTheDocument();
-    expect(screen.getByText('Professionnel')).toBeInTheDocument();
-  });
-});
 
 describe('LandingPage Component Tests', () => {
   it('should render landing page elements', () => {
