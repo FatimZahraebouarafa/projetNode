@@ -22,6 +22,17 @@
     "test:ci": "CI=true react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
+
+  "jest": {
+  "collectCoverageFrom": [
+    "**/*.js",
+    "!**/node_modules/**",
+    "!**/tests/**",
+    "!**/coverage/**",
+    "!jest.config.js"
+  ]
+},
+
   "eslintConfig": {
     "extends": [
       "react-app"
