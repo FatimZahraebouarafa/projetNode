@@ -14,6 +14,19 @@ jest.mock('axios', () => ({
   },
 }));
 
+// Mock authService
+jest.mock('./services/api', () => ({
+  authService: {
+    getCurrentUser: jest.fn(() => ({ firstName: 'Test', role: 'USER' })),
+    login: jest.fn(() => Promise.resolve({ role: 'USER' })),
+    register: jest.fn(() => Promise.resolve({ role: 'USER' })),
+    logout: jest.fn(),
+  },
+  userService: {
+    getProfessionals: jest.fn(() => Promise.resolve([])),
+  },
+}));
+
 // Mock messageService
 jest.mock('./services/messageService', () => ({
   default: {

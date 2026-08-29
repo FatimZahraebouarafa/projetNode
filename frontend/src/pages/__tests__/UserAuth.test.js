@@ -4,14 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import UserAuth from '../UserAuth';
 
-// Mock authService
-jest.mock('../../services/api', () => ({
-  authService: {
-    login: jest.fn(() => Promise.resolve({ role: 'USER' })),
-    register: jest.fn(() => Promise.resolve({ role: 'USER' })),
-  },
-}));
-
 describe('UserAuth Component Tests', () => {
   it('should render login form by default', () => {
     render(
