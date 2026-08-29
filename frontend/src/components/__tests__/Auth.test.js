@@ -1,25 +1,83 @@
-// Test basique pour vérifier que l'environnement de test fonctionne
-describe('Component Environment Test', () => {
-  it('should perform basic math operations', () => {
-    expect(1 + 1).toBe(2);
-    expect(2 * 2).toBe(4);
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import '@testing-library/jest-dom';
+import App from '../../App';
+import LandingPage from '../../pages/LandingPage';
+
+// Mock pour authService
+jest.mock('../../services/api', () => ({
+  authService: {
+    getCurrentUser: jest.fn(),
+  },
+}));
+
+describe('App Component Tests', () => {
+  it('should render App component without crashing', () => {
+    render(
+      <Router>
+        <App />
+      </Router>
+    );
+    expect(screen.getByText('Excellence professionnelle à votre portée')).toBeInTheDocument();
   });
 
-  it('should handle string operations', () => {
-    const testString = 'Hello World';
-    expect(testString).toContain('Hello');
-    expect(testString.length).toBeGreaterThan(5);
+  it('should render LandingPage as default route', () => {
+    render(
+      <Router>
+        <App />
+      </Router>
+    );
+    expect(screen.getByText('Utilisateur')).toBeInTheDocument();
+    expect(screen.getByText('Professionnel')).toBeInTheDocument();
+  });
+});
+
+describe('LandingPage Component Tests', () => {
+  it('should render landing page elements', () => {
+    render(
+      <Router>
+        <LandingPage />
+      </Router>
+    );
+    
+    expect(screen.getByText('Excellence professionnelle à votre portée')).toBeInTheDocument();
+    expect(screen.getByText('Connectez votre ambition avec l\'expertise qui transforme')).toBeInTheDocument();
+    expect(screen.getByText('Utilisateur')).toBeInTheDocument();
+    expect(screen.getByText('Professionnel')).toBeInTheDocument();
   });
 
-  it('should handle array operations', () => {
-    const testArray = [1, 2, 3, 4, 5];
-    expect(testArray).toHaveLength(5);
-    expect(testArray).toContain(3);
+  it('should render user buttons', () => {
+    render(
+      <Router>
+        <LandingPage />
+      </Router>
+    );
+    
+    const userButtons = screen.getAllByText('Connexion');
+    expect(userButtons).toHaveLength(2);
+    
+    const registerButtons = screen.getAllByText("S'inscrire");
+    expect(registerButtons).toHaveLength(2);
   });
 
-  it('should handle object operations', () => {
-    const testObject = { id: 1, name: 'Test' };
-    expect(testObject).toHaveProperty('id');
-    expect(testObject.name).toBe('Test');
+  it('should have correct text content for user card', () => {
+    render(
+      <Router>
+        <LandingPage />
+      </Router>
+    );
+    
+    expect(screen.getByText('Réservez l\'expertise en un clic')).toBeInTheDocument();
+  });
+
+  it('should have correct text content for professional card', () => {
+    render(
+      <Router>
+        <LandingPage />
+      </Router>
+    );
+    
+    expect(screen.getByText('Votre agenda, maîtrisé')).toBeInTheDocument();
   });
 });
