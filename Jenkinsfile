@@ -38,6 +38,7 @@ pipeline {
                     steps {
                         dir('frontend') {
                             sh 'npm install --legacy-peer-deps'
+                            sh 'npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event --legacy-peer-deps'
                             sh 'npm run test:ci'
                         }
                     }
