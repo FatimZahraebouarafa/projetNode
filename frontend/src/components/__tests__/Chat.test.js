@@ -3,15 +3,6 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Chat from '../Chat';
 
-// Mock messageService
-jest.mock('../../services/messageService', () => ({
-  default: {
-    getMessages: jest.fn(() => Promise.resolve([])),
-    sendMessage: jest.fn(() => Promise.resolve({ _id: 'msg1', content: 'test' })),
-    markAsRead: jest.fn(() => Promise.resolve()),
-  },
-}));
-
 describe('Chat Component Tests', () => {
   const mockAppointment = {
     _id: 'appointment1',

@@ -15,20 +15,6 @@ jest.mock('../../services/api', () => ({
   },
 }));
 
-jest.mock('../../services/appointmentService', () => ({
-  default: {
-    getUserAppointments: jest.fn(() => Promise.resolve([])),
-    createAppointment: jest.fn(() => Promise.resolve({})),
-    cancelAppointment: jest.fn(() => Promise.resolve({})),
-  },
-}));
-
-jest.mock('../../services/messageService', () => ({
-  default: {
-    getUnreadCount: jest.fn(() => Promise.resolve({ unreadCount: 0 })),
-  },
-}));
-
 describe('UserDashboard Component Tests', () => {
   it('should render UserDashboard component without crashing', () => {
     render(
