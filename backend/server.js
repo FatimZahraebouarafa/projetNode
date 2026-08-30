@@ -1,24 +1,11 @@
 require('dotenv').config();
-const express = require('express');
 const http = require('http');
-const cors = require('cors');
 const { Server } = require('socket.io');
 const connectDB = require('./config/db');
+const app = require('./app');
 
-// Import routes
-const authRoutes = require('./routes/authRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const userRoutes = require('./routes/userRoutes');
-const professionalRoutes = require('./routes/professional');
-const appointmentRoutes = require('./routes/appointments');
-const messageRoutes = require('./routes/messages');
-const consultationRoutes = require('./routes/consultations');
-
-// Initialize express app
-const app = express();
 const server = http.createServer(app);
 
-// Socket.IO setup
 const io = new Server(server, {
   cors: {
     origin: process.env.FRONTEND_URL || 'http://localhost:3001',
@@ -26,43 +13,12 @@ const io = new Server(server, {
   }
 });
 
-// Make io accessible to routes
 app.set('io', io);
 
-// Connect to MongoDB
 connectDB();
 
-// Middleware
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: false, limit: '50mb' }));
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/professional', professionalRoutes);
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/consultations', consultationRoutes);
-
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', message: 'Rabta API is running' });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode);
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
-  });
-});
-
 // ============ Socket.IO - WebRTC Signaling ============
-const consultationRooms = new Map(); // roomId -> { users: Map<socketId, userInfo> }
+const consultationRooms = new Map();
 
 io.on('connection', (socket) => {
   console.log('🔌 Socket connected:', socket.id);
