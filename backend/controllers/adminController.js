@@ -8,7 +8,8 @@ const getPendingProfessionals = async (req, res) => {
   try {
     const professionals = await Professional.find({ status: 'PENDING' })
       .select('-password')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .exec();
 
     console.log('🔍 Pending professionals count:', professionals.length);
     if (professionals.length > 0) {
@@ -31,7 +32,8 @@ const getAllProfessionals = async (req, res) => {
   try {
     const professionals = await Professional.find()
       .select('-password')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .exec();
 
     res.json(professionals);
   } catch (error) {
