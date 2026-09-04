@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REGISTRY = 'host.docker.internal:8082'
 
-        DOCKER_IMAGE_BACKEND = 'fatimzahraebouarafa/rabta-backend'
-        DOCKER_IMAGE_FRONTEND = 'fatimzahraebouarafa/rabta-frontend'
+        DOCKER_IMAGE_BACKEND = "${DOCKER_REGISTRY}/rabta-backend"
+        DOCKER_IMAGE_FRONTEND = "${DOCKER_REGISTRY}/rabta-frontend"
 
     }
 
@@ -124,19 +124,19 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(
-                        credentialsId: 'docker-registry-credentials',
+                        credentialsId: 'nexus-docker-creds',
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                     )]) {
                         sh """
-                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io
+                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin ${DOCKER_REGISTRY}
                             docker push ${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER}
                             docker push ${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER}
                             docker tag ${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER} ${DOCKER_IMAGE_BACKEND}:latest
                             docker tag ${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER} ${DOCKER_IMAGE_FRONTEND}:latest
                             docker push ${DOCKER_IMAGE_BACKEND}:latest
                             docker push ${DOCKER_IMAGE_FRONTEND}:latest
-                            docker logout docker.io
+                            docker logout ${DOCKER_REGISTRY}
                         """
                     }
                     
