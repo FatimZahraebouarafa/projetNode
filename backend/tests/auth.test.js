@@ -10,18 +10,42 @@ const Professional = require('../models/Professional');
 let mongoServer;
 
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri());
-}, 60000);
+  console.log('Starting MongoDB Memory Server...');
+  try {
+    mongoServer = await MongoMemoryServer.create({
+      binary: {
+        version: '7.0.0'
+      }
+    });
+    const uri = mongoServer.getUri();
+    console.log('MongoDB Memory Server URI:', uri);
+    await mongoose.connect(uri);
+    console.log('Connected to MongoDB Memory Server');
+  } catch (error) {
+    console.error('Failed to start MongoDB Memory Server:', error);
+    throw error;
+  }
+}, 120000);
 
 afterEach(async () => {
-  await User.deleteMany({});
-  await Professional.deleteMany({});
+  try {
+    await User.deleteMany({});
+    await Professional.deleteMany({});
+  } catch (error) {
+    console.error('Error cleaning up test data:', error);
+  }
 });
 
 afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
+  try {
+    await mongoose.disconnect();
+    if (mongoServer) {
+      await mongoServer.stop();
+    }
+    console.log('MongoDB Memory Server stopped');
+  } catch (error) {
+    console.error('Error stopping MongoDB Memory Server:', error);
+  }
 });
 
 describe('Auth API', () => {
