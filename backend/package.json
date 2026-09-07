@@ -19,15 +19,22 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@sigstore/core": "^4.0.1",
     "bcryptjs": "^2.4.3",
+    "brace-expansion": "^5.0.9",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^5.2.1",
     "express-validator": "^7.0.1",
+    "ip-address": "^10.7.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^9.9.5",
     "nodemailer": "^10.0.0",
-    "socket.io": "^4.8.3"
+    "picomatch": "^4.0.7",
+    "postcss-selector-parser": "^7.1.6",
+    "sigstore": "^5.0.0",
+    "socket.io": "^4.8.3",
+    "tar": "^7.5.22"
   },
   "devDependencies": {
     "jest": "^29.7.0",
