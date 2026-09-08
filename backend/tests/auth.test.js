@@ -19,8 +19,20 @@ beforeAll(async () => {
     });
     const uri = mongoServer.getUri();
     console.log('MongoDB Memory Server URI:', uri);
-    await mongoose.connect(uri);
+    
+    // Disconnect any existing connection first
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.disconnect();
+    }
+    
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
     console.log('Connected to MongoDB Memory Server');
+    
+    // Wait a bit for connection to be fully established
+    await new Promise(resolve => setTimeout(resolve, 1000));
   } catch (error) {
     console.error('Failed to start MongoDB Memory Server:', error);
     throw error;
