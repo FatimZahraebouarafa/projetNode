@@ -113,6 +113,38 @@ pipeline {
             }
         }
 
+        stage('Docker Scout Scan') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(
+                        credentialsId: 'dockerhub-scout-creds',
+                        usernameVariable: 'DOCKERHUB_USER',
+                        passwordVariable: 'DOCKERHUB_TOKEN'
+                    )]) {
+                        sh """
+                            echo "===== Scan Backend ====="
+                            docker run --rm \
+                                -v /var/run/docker.sock:/var/run/docker.sock \
+                                -e DOCKER_SCOUT_HUB_USER=\$DOCKERHUB_USER \
+                                -e DOCKER_SCOUT_HUB_PASSWORD=\$DOCKERHUB_TOKEN \
+                                docker/scout-cli cves ${DOCKER_IMAGE_BACKEND}:${BUILD_NUMBER} \
+                                --only-severity critical \
+                                --exit-code || echo "⚠️ Vulnérabilités CRITIQUES détectées dans le backend"
+
+                            echo "===== Scan Frontend ====="
+                            docker run --rm \
+                                -v /var/run/docker.sock:/var/run/docker.sock \
+                                -e DOCKER_SCOUT_HUB_USER=\$DOCKERHUB_USER \
+                                -e DOCKER_SCOUT_HUB_PASSWORD=\$DOCKERHUB_TOKEN \
+                                docker/scout-cli cves ${DOCKER_IMAGE_FRONTEND}:${BUILD_NUMBER} \
+                                --only-severity critical \
+                                --exit-code || echo "⚠️ Vulnérabilités CRITIQUES détectées dans le frontend"
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Push Docker Images') {
             when {
                 anyOf {
